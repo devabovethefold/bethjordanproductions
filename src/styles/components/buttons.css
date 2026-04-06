@@ -1,0 +1,21 @@
+@reference "tailwindcss";
+
+button,
+.btn {
+  @apply bg-base-hi text-neutral-on border-base-hi inline-flex cursor-pointer items-center justify-center rounded-none border transition-all;
+  @apply focus:outline-none;
+
+  &:not([class*='p-']) {
+    @apply justify-between px-6 py-3;
+  }
+
+  &.btn-ghost {
+    @apply text-neutral-md border-neutral-lo bg-neutral-md;
+  }
+
+  &.btn-transparent {
+    @apply text-neutral-md border-transparent bg-transparent;
+  }
+}
+
+/* inline-flex size-10 cursor-pointer items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-500 transition-colors hover:bg-zinc-50 hover:text-zinc-900 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 */

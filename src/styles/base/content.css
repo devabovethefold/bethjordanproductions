@@ -1,0 +1,183 @@
+@utility gap-content {
+  @apply gap-x-(--gap-width);
+}
+
+@utility py-content {
+  @apply py-(--spacing-content-block);
+}
+
+@utility content {
+  @apply gap-content grid;
+  grid-template-columns:
+    [screen-start] var(--edge-width)
+    [fullwidth-start] 1fr
+    [breakout-start] var(--breakout-width)
+    [content-start]
+    var(--col-width)
+    [col-1]
+    var(--col-width)
+    [col-2]
+    var(--col-width)
+    [col-3]
+    var(--col-width)
+    [col-4]
+    var(--col-width)
+    [col-5]
+    var(--col-width)
+    [col-6]
+    var(--col-width)
+    [col-7]
+    var(--col-width)
+    [col-8]
+    var(--col-width)
+    [col-9]
+    var(--col-width)
+    [col-10]
+    var(--col-width)
+    [col-11]
+    var(--col-width)
+    [content-end]
+    var(--breakout-width)
+    [breakout-end]
+    1fr
+    [fullwidth-end]
+    var(--edge-width)
+    [screen-end];
+
+  --grid-start: fullwidth-start;
+  --grid-end: fullwidth-end;
+  --grid-cols: 16;
+
+  :where(&) > :where(*) {
+    grid-column: var(--grid-start) / var(--grid-end);
+  }
+
+  &:has(> [class*='col-span-']),
+  &:has(> .half),
+  &:has(> .third),
+  &:has(> .fourth),
+  &:has(> .sixth),
+  &:has(> .twelfth) {
+    @apply gap-y-8;
+  }
+
+  &.screen,
+  & > .screen {
+    --grid-start: screen-start;
+    --grid-end: screen-end;
+    --grid-cols: 18;
+    grid-column: var(--grid-start) / var(--grid-end);
+  }
+
+  @variant md {
+    --grid-start: content-start;
+    --grid-end: content-end;
+    --grid-cols: 12;
+
+    & > .half,
+    & > .third,
+    & > .fourth,
+    & > .sixth,
+    & > .twelfth {
+      grid-column-start: auto;
+    }
+
+    & > .half {
+      grid-column-end: span calc(var(--grid-cols) / 2);
+    }
+
+    & > .third {
+      grid-column-end: span calc(var(--grid-cols) / 3);
+    }
+
+    & > .fourth {
+      grid-column-end: span calc(var(--grid-cols) / 4);
+    }
+
+    & > .sixth {
+      grid-column-end: span calc(var(--grid-cols) / 6);
+    }
+
+    & > .twelfth {
+      grid-column-end: span calc(var(--grid-cols) / 12);
+    }
+
+    &.breakout,
+    & > .breakout {
+      --grid-start: breakout-start;
+      --grid-end: breakout-end;
+      --grid-cols: 14;
+      grid-column: var(--grid-start) / var(--grid-end);
+    }
+
+    &.fullwidth,
+    & > .fullwidth {
+      --grid-start: fullwidth-start;
+      --grid-end: fullwidth-end;
+      --grid-cols: 16;
+      grid-column: var(--grid-start) / var(--grid-end);
+    }
+
+    & > .col-start-grid {
+      grid-column-start: var(--grid-start) !important;
+    }
+  }
+}
+
+@utility content-* {
+  options: {
+    types: [ratio, number];
+  }
+
+  --ratio: --value(ratio);
+  --number: --value(number);
+
+  --available-width: calc(
+    min(var(--content-max), 100% - calc(var(--edge-width) * 2)) - var(--gap-width)
+  );
+
+  --ratio-left: calc(var(--ratio) * var(--available-width));
+  --ratio-right: calc(var(--available-width) - var(--ratio-left));
+
+  --number-right: min(calc(var(--number) * 0.25rem), var(--available-width));
+  --number-left: calc(var(--available-width) - var(--number-right));
+
+  display: grid;
+  grid-template-columns:
+    [screen-start] var(--edge-width)
+    [fullwidth-start] 1fr
+    [breakout-start] var(--breakout-width)
+    [content-start]
+    minmax(0, var(--ratio-left, var(--number-left)))
+    [center]
+    minmax(0, var(--ratio-right, var(--number-right)))
+    [content-end]
+    var(--breakout-width)
+    [breakout-end]
+    1fr
+    [fullwidth-end]
+    var(--edge-width)
+    [screen-end];
+
+  @apply gap-content;
+
+  :where(&) > :where(:first-child) {
+    grid-column: content-start / center;
+  }
+
+  :where(&) > :where(:nth-child(2)) {
+    grid-column: center / content-end;
+  }
+
+  & > .breakout {
+    --grid-start: breakout-start;
+    --grid-end: breakout-end;
+    grid-column: var(--grid-start) / var(--grid-end);
+  }
+
+  & > .fullwidth {
+    --grid-start: fullwidth-start;
+    --grid-end: fullwidth-end;
+    grid-column: var(--grid-start) / var(--grid-end);
+  }
+}

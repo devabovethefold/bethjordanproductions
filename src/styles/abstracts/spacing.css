@@ -1,0 +1,29 @@
+@theme {
+  --spacing-basis: 0.25rem;
+  --spacing: var(--spacing-basis);
+  --spacing-content-block: clamp(2rem, -1rem + 7.5vw, 5rem);
+
+  /* Margin tracks at the very edge of the screen */
+  --edge-width: 0.5rem;
+
+  /* Total number of horizontal gaps: 11 internal + 6 external */
+  --gap-count: 17;
+  --gap-width: clamp(0.5rem, -1rem + 3.75vw, 2rem);
+  --gap-total: calc(var(--gap-count) * var(--gap-width));
+
+  /* Maximum content width (not including gaps) */
+  --content-max: 70.5rem;
+
+  /* The actual space available for content columns */
+  /* Calculation: (Available Space) - (Gaps) - (Edge Margins) */
+  --content-width: min(
+    calc(100% - var(--gap-total) - (2 * var(--edge-width))),
+    calc(var(--content-max) - (11 * var(--gap-width)))
+  );
+
+  /* Width of a single column in our 12-column content area */
+  --col-width: calc(var(--content-width) / 12);
+
+  --breakout-max: 76.25rem;
+  --breakout-width: minmax(0, calc(var(--breakout-max) - var(--content-max)));
+}

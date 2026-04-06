@@ -1,0 +1,20 @@
+@reference "tailwindcss";
+
+:root {
+  --font-inter: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --font-sans:
+    var(--font-inter), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+
+  --font-scale: 1.2; /* Modular Scale Multiplier (Default: Minor Third) */
+
+  --text-h1: calc(1rem * pow(var(--font-scale), 6));
+  --text-h2: calc(1rem * pow(var(--font-scale), 5));
+  --text-h3: calc(1rem * pow(var(--font-scale), 4));
+  --text-h4: calc(1rem * pow(var(--font-scale), 3));
+  --text-h5: calc(1rem * pow(var(--font-scale), 2));
+  --text-h6: calc(1rem * pow(var(--font-scale), 1));
+}

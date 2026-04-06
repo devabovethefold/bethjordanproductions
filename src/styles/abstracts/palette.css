@@ -1,0 +1,261 @@
+/**
+ * Design System Color Palette
+ * ============================================================
+ * Set --color-brand to any hex value. Every scale is derived
+ * automatically using OKLCH relative color syntax — no build
+ * step required.
+ *
+ * Step curve calibrated to match Eva Design System's perceptual
+ * tint/shade progression (colors.eva.design). Step 500 lands
+ * closest to the raw brand color. Lighter steps are tints
+ * toward white; darker steps are shades toward black.
+ *
+ * Browser support: Chrome 111+, Firefox 128+, Safari 16.4+
+ * ============================================================
+ */
+
+:root {
+  /* ── 1. Brand Input ─────────────────────────────────────── */
+  --color-brand: #195230;
+
+  /* ── 2. Semantic Base Colors ────────────────────────────────
+     Each token is anchored to a perceptual hue in OKLCH while
+     inheriting the brand's lightness/chroma energy. The base
+     color is normalized to a mid-range L/C so the step curve
+     produces consistent tints and shades regardless of how
+     light or dark the raw brand hex is.
+
+     Hue reference (OKLCH, approx):
+       base    → brand hue  (primary)
+       accent  → brand + 180° (complementary)
+       info    → 250° (blue)
+       success → 145° (green)
+       warning →  85° (amber)
+       error   →  25° (red)
+       neutral → brand hue, near-zero chroma               */
+
+  --base: oklch(from var(--color-brand) 0.58 0.16 h);
+  --accent: oklch(from var(--base) calc(l + 0.04) calc(c - 0.02) calc(h + 180));
+  --info: oklch(from var(--base) calc(l + 0.02) calc(c - 0.04) 250);
+  --success: oklch(from var(--base) calc(l - 0.04) calc(c - 0.02) 145);
+  --warning: oklch(from var(--base) calc(l + 0.07) calc(c - 0.01) 85);
+  --error: oklch(from var(--base) l calc(c + 0.02) 25);
+  --neutral: oklch(from var(--base) calc(l - 0.02) 0.01 h);
+
+  /* ── 3. Constants ───────────────────────────────────────── */
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+
+  /* ── 4. Step Curve ──────────────────────────────────────────
+     Lightness (L) and Chroma (C) values per stop, calibrated
+     against Eva Design System's RGB tint/shade algorithm and
+     converted to perceptual OKLCH equivalents.
+
+     Eva's RGB formula:
+       tint  = mix(white, color, weight)   → steps 100–400
+       base  = color                       → step  500
+       shade = mix(black, color, weight)   → steps 600–900
+
+     Extrapolated stops (01, 05, 10, 50, 950–999) extend the
+     curve consistently beyond Eva's native 9-step range,
+     useful for surface backgrounds and near-black text.
+
+     Chroma is highest at step 500 (full saturation) and tapers
+     symmetrically toward both ends, matching Eva's behavior
+     where mixed colors lose saturation as they approach white
+     or black.
+
+     ┌────────┬───────┬───────┐
+     │  Stop  │   L   │   C   │
+     ├────────┼───────┼───────┤
+     │    01  │ 0.993 │ 0.008 │  ← near-white surface
+     │    05  │ 0.978 │ 0.020 │
+     │    10  │ 0.960 │ 0.038 │
+     │    50  │ 0.940 │ 0.058 │
+     │   100  │ 0.880 │ 0.074 │  ← Eva step 100 (80% tint)
+     │   200  │ 0.800 │ 0.110 │  ← Eva step 200 (60% tint)
+     │   300  │ 0.718 │ 0.145 │  ← Eva step 300 (40% tint)
+     │   400  │ 0.644 │ 0.172 │  ← Eva step 400 (20% tint)
+     │   500  │ 0.578 │ 0.190 │  ← Eva step 500 (base color)
+     │   600  │ 0.486 │ 0.162 │  ← Eva step 600 (20% shade)
+     │   700  │ 0.390 │ 0.130 │  ← Eva step 700 (40% shade)
+     │   800  │ 0.289 │ 0.095 │  ← Eva step 800 (60% shade)
+     │   900  │ 0.179 │ 0.055 │  ← Eva step 900 (80% shade)
+     │   950  │ 0.130 │ 0.038 │
+     │   990  │ 0.075 │ 0.020 │
+     │   995  │ 0.040 │ 0.012 │
+     │   999  │ 0.010 │ 0.005 │  ← near-black
+     └────────┴───────┴───────┘                             */
+
+  --step-01-l: 0.993;
+  --step-01-c: 0.008;
+  --step-05-l: 0.978;
+  --step-05-c: 0.02;
+  --step-10-l: 0.96;
+  --step-10-c: 0.038;
+  --step-50-l: 0.94;
+  --step-50-c: 0.058;
+  --step-100-l: 0.88;
+  --step-100-c: 0.074;
+  --step-200-l: 0.8;
+  --step-200-c: 0.11;
+  --step-300-l: 0.718;
+  --step-300-c: 0.145;
+  --step-400-l: 0.644;
+  --step-400-c: 0.172;
+  --step-500-l: 0.578;
+  --step-500-c: 0.19;
+  --step-600-l: 0.486;
+  --step-600-c: 0.162;
+  --step-700-l: 0.39;
+  --step-700-c: 0.13;
+  --step-800-l: 0.289;
+  --step-800-c: 0.095;
+  --step-900-l: 0.179;
+  --step-900-c: 0.055;
+  --step-950-l: 0.13;
+  --step-950-c: 0.038;
+  --step-990-l: 0.075;
+  --step-990-c: 0.02;
+  --step-995-l: 0.04;
+  --step-995-c: 0.012;
+  --step-999-l: 0.01;
+  --step-999-c: 0.005;
+
+  /* ── 5. Base Scale ──────────────────────────────────────── */
+  --base-01: oklch(from var(--base) var(--step-01-l) var(--step-01-c) h);
+  --base-05: oklch(from var(--base) var(--step-05-l) var(--step-05-c) h);
+  --base-10: oklch(from var(--base) var(--step-10-l) var(--step-10-c) h);
+  --base-50: oklch(from var(--base) var(--step-50-l) var(--step-50-c) h);
+  --base-100: oklch(from var(--base) var(--step-100-l) var(--step-100-c) h);
+  --base-200: oklch(from var(--base) var(--step-200-l) var(--step-200-c) h);
+  --base-300: oklch(from var(--base) var(--step-300-l) var(--step-300-c) h);
+  --base-400: oklch(from var(--base) var(--step-400-l) var(--step-400-c) h);
+  --base-500: oklch(from var(--base) var(--step-500-l) var(--step-500-c) h);
+  --base-600: oklch(from var(--base) var(--step-600-l) var(--step-600-c) h);
+  --base-700: oklch(from var(--base) var(--step-700-l) var(--step-700-c) h);
+  --base-800: oklch(from var(--base) var(--step-800-l) var(--step-800-c) h);
+  --base-900: oklch(from var(--base) var(--step-900-l) var(--step-900-c) h);
+  --base-950: oklch(from var(--base) var(--step-950-l) var(--step-950-c) h);
+  --base-990: oklch(from var(--base) var(--step-990-l) var(--step-990-c) h);
+  --base-995: oklch(from var(--base) var(--step-995-l) var(--step-995-c) h);
+  --base-999: oklch(from var(--base) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 6. Accent Scale ────────────────────────────────────── */
+  --accent-01: oklch(from var(--accent) var(--step-01-l) var(--step-01-c) h);
+  --accent-05: oklch(from var(--accent) var(--step-05-l) var(--step-05-c) h);
+  --accent-10: oklch(from var(--accent) var(--step-10-l) var(--step-10-c) h);
+  --accent-50: oklch(from var(--accent) var(--step-50-l) var(--step-50-c) h);
+  --accent-100: oklch(from var(--accent) var(--step-100-l) var(--step-100-c) h);
+  --accent-200: oklch(from var(--accent) var(--step-200-l) var(--step-200-c) h);
+  --accent-300: oklch(from var(--accent) var(--step-300-l) var(--step-300-c) h);
+  --accent-400: oklch(from var(--accent) var(--step-400-l) var(--step-400-c) h);
+  --accent-500: oklch(from var(--accent) var(--step-500-l) var(--step-500-c) h);
+  --accent-600: oklch(from var(--accent) var(--step-600-l) var(--step-600-c) h);
+  --accent-700: oklch(from var(--accent) var(--step-700-l) var(--step-700-c) h);
+  --accent-800: oklch(from var(--accent) var(--step-800-l) var(--step-800-c) h);
+  --accent-900: oklch(from var(--accent) var(--step-900-l) var(--step-900-c) h);
+  --accent-950: oklch(from var(--accent) var(--step-950-l) var(--step-950-c) h);
+  --accent-990: oklch(from var(--accent) var(--step-990-l) var(--step-990-c) h);
+  --accent-995: oklch(from var(--accent) var(--step-995-l) var(--step-995-c) h);
+  --accent-999: oklch(from var(--accent) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 7. Info Scale ──────────────────────────────────────── */
+  --info-01: oklch(from var(--info) var(--step-01-l) var(--step-01-c) h);
+  --info-05: oklch(from var(--info) var(--step-05-l) var(--step-05-c) h);
+  --info-10: oklch(from var(--info) var(--step-10-l) var(--step-10-c) h);
+  --info-50: oklch(from var(--info) var(--step-50-l) var(--step-50-c) h);
+  --info-100: oklch(from var(--info) var(--step-100-l) var(--step-100-c) h);
+  --info-200: oklch(from var(--info) var(--step-200-l) var(--step-200-c) h);
+  --info-300: oklch(from var(--info) var(--step-300-l) var(--step-300-c) h);
+  --info-400: oklch(from var(--info) var(--step-400-l) var(--step-400-c) h);
+  --info-500: oklch(from var(--info) var(--step-500-l) var(--step-500-c) h);
+  --info-600: oklch(from var(--info) var(--step-600-l) var(--step-600-c) h);
+  --info-700: oklch(from var(--info) var(--step-700-l) var(--step-700-c) h);
+  --info-800: oklch(from var(--info) var(--step-800-l) var(--step-800-c) h);
+  --info-900: oklch(from var(--info) var(--step-900-l) var(--step-900-c) h);
+  --info-950: oklch(from var(--info) var(--step-950-l) var(--step-950-c) h);
+  --info-990: oklch(from var(--info) var(--step-990-l) var(--step-990-c) h);
+  --info-995: oklch(from var(--info) var(--step-995-l) var(--step-995-c) h);
+  --info-999: oklch(from var(--info) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 8. Success Scale ───────────────────────────────────── */
+  --success-01: oklch(from var(--success) var(--step-01-l) var(--step-01-c) h);
+  --success-05: oklch(from var(--success) var(--step-05-l) var(--step-05-c) h);
+  --success-10: oklch(from var(--success) var(--step-10-l) var(--step-10-c) h);
+  --success-50: oklch(from var(--success) var(--step-50-l) var(--step-50-c) h);
+  --success-100: oklch(from var(--success) var(--step-100-l) var(--step-100-c) h);
+  --success-200: oklch(from var(--success) var(--step-200-l) var(--step-200-c) h);
+  --success-300: oklch(from var(--success) var(--step-300-l) var(--step-300-c) h);
+  --success-400: oklch(from var(--success) var(--step-400-l) var(--step-400-c) h);
+  --success-500: oklch(from var(--success) var(--step-500-l) var(--step-500-c) h);
+  --success-600: oklch(from var(--success) var(--step-600-l) var(--step-600-c) h);
+  --success-700: oklch(from var(--success) var(--step-700-l) var(--step-700-c) h);
+  --success-800: oklch(from var(--success) var(--step-800-l) var(--step-800-c) h);
+  --success-900: oklch(from var(--success) var(--step-900-l) var(--step-900-c) h);
+  --success-950: oklch(from var(--success) var(--step-950-l) var(--step-950-c) h);
+  --success-990: oklch(from var(--success) var(--step-990-l) var(--step-990-c) h);
+  --success-995: oklch(from var(--success) var(--step-995-l) var(--step-995-c) h);
+  --success-999: oklch(from var(--success) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 9. Warning Scale ───────────────────────────────────── */
+  --warning-01: oklch(from var(--warning) var(--step-01-l) var(--step-01-c) h);
+  --warning-05: oklch(from var(--warning) var(--step-05-l) var(--step-05-c) h);
+  --warning-10: oklch(from var(--warning) var(--step-10-l) var(--step-10-c) h);
+  --warning-50: oklch(from var(--warning) var(--step-50-l) var(--step-50-c) h);
+  --warning-100: oklch(from var(--warning) var(--step-100-l) var(--step-100-c) h);
+  --warning-200: oklch(from var(--warning) var(--step-200-l) var(--step-200-c) h);
+  --warning-300: oklch(from var(--warning) var(--step-300-l) var(--step-300-c) h);
+  --warning-400: oklch(from var(--warning) var(--step-400-l) var(--step-400-c) h);
+  --warning-500: oklch(from var(--warning) var(--step-500-l) var(--step-500-c) h);
+  --warning-600: oklch(from var(--warning) var(--step-600-l) var(--step-600-c) h);
+  --warning-700: oklch(from var(--warning) var(--step-700-l) var(--step-700-c) h);
+  --warning-800: oklch(from var(--warning) var(--step-800-l) var(--step-800-c) h);
+  --warning-900: oklch(from var(--warning) var(--step-900-l) var(--step-900-c) h);
+  --warning-950: oklch(from var(--warning) var(--step-950-l) var(--step-950-c) h);
+  --warning-990: oklch(from var(--warning) var(--step-990-l) var(--step-990-c) h);
+  --warning-995: oklch(from var(--warning) var(--step-995-l) var(--step-995-c) h);
+  --warning-999: oklch(from var(--warning) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 10. Error Scale ────────────────────────────────────── */
+  --error-01: oklch(from var(--error) var(--step-01-l) var(--step-01-c) h);
+  --error-05: oklch(from var(--error) var(--step-05-l) var(--step-05-c) h);
+  --error-10: oklch(from var(--error) var(--step-10-l) var(--step-10-c) h);
+  --error-50: oklch(from var(--error) var(--step-50-l) var(--step-50-c) h);
+  --error-100: oklch(from var(--error) var(--step-100-l) var(--step-100-c) h);
+  --error-200: oklch(from var(--error) var(--step-200-l) var(--step-200-c) h);
+  --error-300: oklch(from var(--error) var(--step-300-l) var(--step-300-c) h);
+  --error-400: oklch(from var(--error) var(--step-400-l) var(--step-400-c) h);
+  --error-500: oklch(from var(--error) var(--step-500-l) var(--step-500-c) h);
+  --error-600: oklch(from var(--error) var(--step-600-l) var(--step-600-c) h);
+  --error-700: oklch(from var(--error) var(--step-700-l) var(--step-700-c) h);
+  --error-800: oklch(from var(--error) var(--step-800-l) var(--step-800-c) h);
+  --error-900: oklch(from var(--error) var(--step-900-l) var(--step-900-c) h);
+  --error-950: oklch(from var(--error) var(--step-950-l) var(--step-950-c) h);
+  --error-990: oklch(from var(--error) var(--step-990-l) var(--step-990-c) h);
+  --error-995: oklch(from var(--error) var(--step-995-l) var(--step-995-c) h);
+  --error-999: oklch(from var(--error) var(--step-999-l) var(--step-999-c) h);
+
+  /* ── 11. Neutral Scale ──────────────────────────────────────
+     Neutral preserves its own (very low) chroma rather than
+     using the shared step-c values, so it stays truly neutral
+     regardless of brand saturation.                         */
+  --neutral-01: oklch(from var(--neutral) var(--step-01-l) c h);
+  --neutral-05: oklch(from var(--neutral) var(--step-05-l) c h);
+  --neutral-10: oklch(from var(--neutral) var(--step-10-l) c h);
+  --neutral-50: oklch(from var(--neutral) var(--step-50-l) c h);
+  --neutral-100: oklch(from var(--neutral) var(--step-100-l) c h);
+  --neutral-200: oklch(from var(--neutral) var(--step-200-l) c h);
+  --neutral-300: oklch(from var(--neutral) var(--step-300-l) c h);
+  --neutral-400: oklch(from var(--neutral) var(--step-400-l) c h);
+  --neutral-500: oklch(from var(--neutral) var(--step-500-l) c h);
+  --neutral-600: oklch(from var(--neutral) var(--step-600-l) c h);
+  --neutral-700: oklch(from var(--neutral) var(--step-700-l) c h);
+  --neutral-800: oklch(from var(--neutral) var(--step-800-l) c h);
+  --neutral-900: oklch(from var(--neutral) var(--step-900-l) c h);
+  --neutral-950: oklch(from var(--neutral) var(--step-950-l) c h);
+  --neutral-990: oklch(from var(--neutral) var(--step-990-l) c h);
+  --neutral-995: oklch(from var(--neutral) var(--step-995-l) c h);
+  --neutral-999: oklch(from var(--neutral) var(--step-999-l) c h);
+}

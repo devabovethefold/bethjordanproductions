@@ -1,0 +1,41 @@
+@reference "tailwindcss";
+
+dialog {
+  @apply fixed inset-y-0 right-0 z-50 m-0 ml-auto h-screen max-h-screen w-fit max-w-screen flex-col space-y-8 border-none bg-white p-6 shadow-2xl focus:outline-none dark:bg-zinc-900;
+
+  transition:
+    transform 300ms ease-out,
+    display 300ms ease-out allow-discrete,
+    overlay 300ms ease-out allow-discrete;
+  transform: translateX(100%);
+}
+
+dialog[open] {
+  @apply flex;
+  transform: translateX(0);
+}
+
+@starting-style {
+  dialog[open] {
+    transform: translateX(100%);
+  }
+}
+
+dialog::backdrop {
+  transition:
+    background-color 300ms ease-out,
+    display 300ms ease-out allow-discrete,
+    overlay 300ms ease-out allow-discrete;
+  background-color: transparent;
+  backdrop-filter: blur(4px);
+}
+
+dialog[open]::backdrop {
+  background-color: oklch(from var(--base-950) l c h / 0.6);
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}

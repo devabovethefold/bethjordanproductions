@@ -1,0 +1,126 @@
+@custom-variant dark (&:where(.dark, .dark *, [data-theme=dark], [data-theme=dark] *));
+
+@variant dark {
+  /* --- Backgrounds --- */
+  --background-color-base-lo: var(--base-999);
+  --background-color-base-md: var(--base-990);
+  --background-color-base-hi: var(--base-500);
+
+  --background-color-accent-lo: var(--accent-999);
+  --background-color-accent-md: var(--accent-990);
+  --background-color-accent-hi: var(--accent-500);
+
+  --background-color-info-lo: var(--info-999);
+  --background-color-info-md: var(--info-990);
+  --background-color-info-hi: var(--info-500);
+
+  --background-color-success-lo: var(--success-999);
+  --background-color-success-md: var(--success-990);
+  --background-color-success-hi: var(--success-500);
+
+  --background-color-warning-lo: var(--warning-999);
+  --background-color-warning-md: var(--warning-990);
+  --background-color-warning-hi: var(--warning-500);
+
+  --background-color-error-lo: var(--error-999);
+  --background-color-error-md: var(--error-990);
+  --background-color-error-hi: var(--error-500);
+
+  --background-color-neutral-lo: var(--neutral-999);
+  --background-color-neutral-md: var(--neutral-990);
+  --background-color-neutral-hi: var(--neutral-500);
+
+  /* --- Text --- */
+  --text-color-base-lo: var(--base-500);
+  --text-color-base-md: var(--base-300);
+  --text-color-base-hi: var(--base-100);
+  --text-color-base-on: var(--base-01);
+
+  --text-color-accent-lo: var(--accent-500);
+  --text-color-accent-md: var(--accent-300);
+  --text-color-accent-hi: var(--accent-100);
+  --text-color-accent-on: var(--accent-01);
+
+  --text-color-info-lo: var(--info-500);
+  --text-color-info-md: var(--info-300);
+  --text-color-info-hi: var(--info-100);
+  --text-color-info-on: var(--info-01);
+
+  --text-color-success-lo: var(--success-500);
+  --text-color-success-md: var(--success-300);
+  --text-color-success-hi: var(--success-100);
+  --text-color-success-on: var(--success-01);
+
+  --text-color-warning-lo: var(--warning-500);
+  --text-color-warning-md: var(--warning-300);
+  --text-color-warning-hi: var(--warning-100);
+  --text-color-warning-on: var(--warning-01);
+
+  --text-color-error-lo: var(--error-500);
+  --text-color-error-md: var(--error-300);
+  --text-color-error-hi: var(--error-100);
+  --text-color-error-on: var(--error-01);
+
+  --text-color-neutral-lo: var(--neutral-500);
+  --text-color-neutral-md: var(--neutral-300);
+  --text-color-neutral-hi: var(--neutral-100);
+  --text-color-neutral-on: var(--neutral-01);
+
+  /* --- Border --- */
+  --border-color-base-lo: var(--base-800);
+  --border-color-base-md: var(--base-700);
+  --border-color-base-hi: var(--base-400);
+
+  --border-color-accent-lo: var(--accent-800);
+  --border-color-accent-md: var(--accent-700);
+  --border-color-accent-hi: var(--accent-500);
+
+  --border-color-info-lo: var(--info-800);
+  --border-color-info-md: var(--info-700);
+  --border-color-info-hi: var(--info-500);
+
+  --border-color-success-lo: var(--success-800);
+  --border-color-success-md: var(--success-700);
+  --border-color-success-hi: var(--success-500);
+
+  --border-color-warning-lo: var(--warning-800);
+  --border-color-warning-md: var(--warning-700);
+  --border-color-warning-hi: var(--warning-500);
+
+  --border-color-error-lo: var(--error-800);
+  --border-color-error-md: var(--error-700);
+  --border-color-error-hi: var(--error-500);
+
+  --border-color-neutral-lo: var(--neutral-800);
+  --border-color-neutral-md: var(--neutral-700);
+  --border-color-neutral-hi: var(--neutral-500);
+
+  /* --- Shadow --- */
+  --box-shadow-color-base-lo: oklch(from var(--base-900) l c h / 0.3);
+  --box-shadow-color-base-md: oklch(from var(--base-900) l c h / 0.4);
+  --box-shadow-color-base-hi: oklch(from var(--base-900) l c h / 0.5);
+
+  --box-shadow-color-accent-lo: oklch(from var(--accent-900) l c h / 0.12);
+  --box-shadow-color-accent-md: oklch(from var(--accent-900) l c h / 0.24);
+  --box-shadow-color-accent-hi: oklch(from var(--accent-900) l c h / 0.36);
+
+  --box-shadow-color-info-lo: oklch(from var(--info-900) l c h / 0.12);
+  --box-shadow-color-info-md: oklch(from var(--info-900) l c h / 0.24);
+  --box-shadow-color-info-hi: oklch(from var(--info-900) l c h / 0.36);
+
+  --box-shadow-color-success-lo: oklch(from var(--success-900) l c h / 0.12);
+  --box-shadow-color-success-md: oklch(from var(--success-900) l c h / 0.24);
+  --box-shadow-color-success-hi: oklch(from var(--success-900) l c h / 0.36);
+
+  --box-shadow-color-warning-lo: oklch(from var(--warning-900) l c h / 0.12);
+  --box-shadow-color-warning-md: oklch(from var(--warning-900) l c h / 0.24);
+  --box-shadow-color-warning-hi: oklch(from var(--warning-900) l c h / 0.36);
+
+  --box-shadow-color-error-lo: oklch(from var(--error-900) l c h / 0.12);
+  --box-shadow-color-error-md: oklch(from var(--error-900) l c h / 0.24);
+  --box-shadow-color-error-hi: oklch(from var(--error-900) l c h / 0.36);
+
+  --box-shadow-color-neutral-lo: oklch(from var(--neutral-900) l c h / 0.12);
+  --box-shadow-color-neutral-md: oklch(from var(--neutral-900) l c h / 0.24);
+  --box-shadow-color-neutral-hi: oklch(from var(--neutral-900) l c h / 0.36);
+}

@@ -1,0 +1,36 @@
+@reference "tailwindcss";
+
+:root {
+  /* 1. The Global Starting Surface (Neutral Low from your theme) */
+  --bg-surface: var(--background-color-neutral-lo);
+
+  /* 2. Elevation Intensity: Higher = Lighter in Dark Mode, Darker in Light */
+  --elevation-intensity: -0.015;
+}
+
+@variant dark {
+  --elevation-intensity: 0.05;
+}
+
+/**
+  * Dynamic Surface Utility
+  * -------------------------------------------------------------------
+  * 1. Consumes the inherited --bg-surface.
+  * 2. Recalculates --bg-surface for its children using the intensity.
+  * 3. Perfect for infinite nesting without complex selectors.
+  * -------------------------------------------------------------------
+  */
+@utility surface {
+  background-color: var(--bg-surface);
+
+  /* Update variable for all children who also use .surface */
+  --bg-surface: oklch(from var(--bg-surface) calc(l + var(--elevation-intensity)) c h);
+
+  /* Optional: Provide a matching border color derived from surface */
+  border-color: oklch(from var(--bg-surface) calc(l - 0.05) c h);
+
+  /* Transition for theme/elevation shifting */
+  transition:
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
+}

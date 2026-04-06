@@ -1,0 +1,105 @@
+---
+import { Icon } from 'astro-icon/components'
+---
+
+<header>
+  <nav class="flex items-center justify-between py-4">
+    <a href="/">Header</a>
+    <ul class="hidden basis-3xs items-center justify-between gap-4 md:flex">
+      <li><a href="/">Home</a></li>
+      <li
+        class="group relative"
+        x-data="{ open: false }"
+        @mouseenter="open = true"
+        @mouseleave="open = false"
+      >
+        <button class="btn-transparent p-0" aria-haspopup="true" :aria-expanded="open">
+          Testing
+          <Icon
+            name="mdi:chevron-down"
+            class="size-4 transition-transform duration-300"
+            :class="open ? 'rotate-180' : ''"
+          />
+        </button>
+
+        <div
+          x-show="open"
+          x-transition:enter="transition ease-out duration-300 transform origin-top"
+          x-transition:enter-start="opacity-0 -translate-y-2 scale-y-90"
+          x-transition:enter-end="opacity-100 translate-y-0 scale-y-100"
+          x-transition:leave="transition ease-in duration-200 transform origin-top"
+          x-transition:leave-start="opacity-100 translate-y-0 scale-y-100"
+          x-transition:leave-end="opacity-0 -translate-y-2 scale-y-90"
+          class="surface absolute top-full left-0 z-50 mt-2 min-w-[200px] overflow-hidden rounded-xl border border-slate-200/50 p-2 shadow-2xl backdrop-blur-md"
+        >
+          <ul class="flex flex-col gap-1">
+            <li>
+              <a
+                href="/testing/animations"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Animations</a
+              >
+            </li>
+            <li>
+              <a
+                href="/testing/components"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Components</a
+              >
+            </li>
+            <li>
+              <a
+                href="/testing/grid"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Grid Layout</a
+              >
+            </li>
+            <li>
+              <a
+                href="/testing/layers"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Stacking & Layers</a
+              >
+            </li>
+            <li>
+              <a
+                href="/testing/lighting"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Lighting Effects</a
+              >
+            </li>
+            <li>
+              <a
+                href="/testing/palette"
+                class="block w-full rounded-lg px-4 py-2 text-sm transition-colors hover:bg-slate-100 dark:hover:bg-white/10"
+                >Palette Tester</a
+              >
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li><a href="/contact" class="btn">Contact</a></li>
+    </ul>
+    <div class="flex items-center justify-between gap-2">
+      <button
+        @click="$store.theme.toggle()"
+        :aria-label="$store.theme.label"
+        class="btn-ghost size-10 p-0"
+      >
+        <Icon name="mdi:moon-waning-crescent" class="hidden -rotate-25 dark:block" />
+        <Icon name="mdi:white-balance-sunny" class="dark:hidden" />
+      </button>
+      <button
+        @click="$store.drawer.toggle()"
+        aria-label="Open the mobile navigation menu"
+        class="btn-ghost size-10 p-0 md:hidden!"
+      >
+        <Icon name="mdi:menu" />
+      </button>
+    </div>
+  </nav>
+</header>
+
+<style>
+  @import '@styles/landmarks/header.css';
+</style>

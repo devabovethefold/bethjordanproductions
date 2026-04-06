@@ -1,0 +1,7 @@
+@reference 'tailwindcss';
+
+@layer base {
+  section {
+    @apply content py-content;
+  }
+}
