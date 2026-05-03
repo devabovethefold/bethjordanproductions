@@ -1,13 +1,22 @@
 ---
-import Layout from '@layouts/Common.astro'
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Services from '../components/Services.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
-  <section>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti aliquid fugit ex,
-      praesentium amet consequuntur laborum unde sequi corporis harum dolorem eos dolores alias
-      magnam id suscipit est reprehenderit ipsum!
-    </p>
-  </section>
+  <Nav />
+  <main id="main-content">
+    <Hero />
+    <Portfolio />
+    <Services />
+    <About />
+    <Contact />
+  </main>
+  <Footer />
 </Layout>

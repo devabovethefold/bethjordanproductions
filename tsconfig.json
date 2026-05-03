@@ -1,15 +1,5 @@
 {
-  "compilerOptions": {
-    "paths": {
-      "@components/*": ["./src/components/*"],
-      "@landmarks/*": ["./src/landmarks/*"],
-      "@layouts/*": ["./src/layouts/*"],
-      "@pages/*": ["./src/pages/*"],
-      "@styles/*": ["./src/styles/*"],
-      "@utilities/*": ["./src/utilities/*"]
-    }
-  },
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*", "./worker-configuration.d.ts"],
+  "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }

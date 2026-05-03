@@ -1,0 +1,132 @@
+---
+const services = [
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072M12 6v12m0-12c-1.5 0-3 .5-4.243 1.757A6 6 0 006 12a6 6 0 001.757 4.243M12 18c1.5 0 3-.5 4.243-1.757A6 6 0 0018 12a6 6 0 00-1.757-4.243"/>`,
+    title: 'Commercial Ad Production',
+    tagline: 'Spots That Sell.',
+    description: 'Full-service production for radio, TV, and digital commercials. We write, voice, score, and deliver broadcast-ready spots that cut through the noise and drive results.',
+    items: ['30 & 60 Second Radio Spots', 'TV & Digital Commercial Audio', 'Campaign Packages', 'Same-Day Rush Delivery'],
+    color: 'purple',
+  },
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`,
+    title: 'Radio Imaging & Promos',
+    tagline: 'Identity That Resonates.',
+    description: 'Custom station imaging packages built to define your format and make your brand instantly recognizable. Sweepers, liners, IDs, drop-ins, and seasonal promos.',
+    items: ['Station Imaging Packages', 'Sweepers & Liners', 'Show Promos & Drops', 'Seasonal Campaign Kits'],
+    color: 'violet',
+  },
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>`,
+    title: 'Sound Design',
+    tagline: 'The Sound of Story.',
+    description: 'Original sound design for film, video, gaming, and branded content. Every sonic element crafted to serve the narrative — from ambient atmospheres to precision foley.',
+    items: ['Film & Video Sound Design', 'Game Audio & SFX Libraries', 'Foley Recording', 'Branded Sonic Logos'],
+    color: 'fuchsia',
+  },
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>`,
+    title: 'Audiobook Production',
+    tagline: 'Words Come Alive.',
+    description: 'Professional audiobook recording, editing, and mastering ready for ACX, Audible, Findaway Voices, and all major distribution platforms. Fiction, non-fiction, and self-help.',
+    items: ['Voice Direction & Recording', 'Editing & Noise Reduction', 'Mastering to ACX Standards', 'Multi-Platform Distribution Prep'],
+    color: 'purple',
+  },
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>`,
+    title: 'Corporate Audio',
+    tagline: 'Your Brand. Heard Clearly.',
+    description: 'Premium audio solutions for enterprise needs — e-learning narration, internal training modules, IVR systems, conference and event production, and brand voice development.',
+    items: ['E-Learning & Training Narration', 'IVR & On-Hold Systems', 'Internal Communications', 'Event & Conference Audio'],
+    color: 'violet',
+  },
+  {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 9l10.5-3m0 6.553v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 11-.99-3.467l2.31-.66a2.25 2.25 0 001.632-2.163zm0 0V2.25L9 5.25v10.303m0 0v3.75a2.25 2.25 0 01-1.632 2.163l-1.32.377a1.803 1.803 0 01-.99-3.467l2.31-.66A2.25 2.25 0 009 15.553z"/>`,
+    title: 'Music Production',
+    tagline: 'From Vision to Master.',
+    description: 'Full-service music production for artists, labels, sync licensing, and branded content. Arrangement, recording, mixing, and mastering — all under one roof.',
+    items: ['Artist Recording & Arrangement', 'Mixing & Mastering', 'Sync Licensing Prep', 'Custom Music Beds & Scores'],
+    color: 'fuchsia',
+  },
+];
+
+const colorClasses: Record<string, { icon: string; border: string; tag: string; link: string; hover: string }> = {
+  purple:  { icon: 'bg-brand-purple/15 border-brand-purple/35 text-brand-purple-light',   border: 'hover:border-brand-purple/30',   tag: 'bg-brand-purple/10 border-brand-purple/25 text-brand-purple-light',   link: 'text-brand-purple-light', hover: 'hover:shadow-brand-purple/10' },
+  violet:  { icon: 'bg-violet-500/15 border-violet-500/35 text-violet-300',               border: 'hover:border-violet-500/30',     tag: 'bg-violet-500/10 border-violet-500/25 text-violet-300',               link: 'text-violet-300',         hover: 'hover:shadow-violet-500/10' },
+  fuchsia: { icon: 'bg-fuchsia-500/15 border-fuchsia-500/35 text-fuchsia-300',            border: 'hover:border-fuchsia-500/30',   tag: 'bg-fuchsia-500/10 border-fuchsia-500/25 text-fuchsia-300',            link: 'text-fuchsia-300',        hover: 'hover:shadow-fuchsia-500/10' },
+};
+---
+
+<section
+  id="services"
+  class="relative py-24 lg:py-32 bg-mesh-services"
+  aria-labelledby="services-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-darker to-black pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-purple-light"></span>
+        <span class="font-mono text-xs text-brand-purple-light tracking-widest uppercase">What We Do</span>
+      </div>
+      <h2 id="services-heading" class="font-display text-4xl sm:text-5xl font-bold text-white">
+        Six Disciplines. <span class="text-brand-purple-light">One Standard.</span>
+      </h2>
+      <p class="mt-4 font-body text-white/50 max-w-xl mx-auto">
+        Every service delivered with broadcast precision and creative excellence.
+      </p>
+    </div>
+
+    <!-- Services grid -->
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+      {services.map((service) => {
+        const c = colorClasses[service.color] ?? colorClasses['purple'];
+        return (
+          <div
+            class={`group rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm p-6 ${c.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${c.hover} relative overflow-hidden`}
+            role="listitem"
+          >
+            <!-- Top accent on hover -->
+            <div class="absolute top-0 left-6 right-6 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:via-white/20 transition-colors duration-300" aria-hidden="true"></div>
+
+            <!-- Icon -->
+            <div class={`inline-flex items-center justify-center w-11 h-11 rounded-xl border mb-5 ${c.icon}`} aria-hidden="true">
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" set:html={service.icon}></svg>
+            </div>
+
+            <!-- Tagline -->
+            <div class={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono tracking-widest border mb-3 ${c.tag}`}>
+              {service.tagline}
+            </div>
+
+            <h3 class="font-display text-xl font-bold text-white mb-3">{service.title}</h3>
+
+            <p class="font-body text-sm text-white/48 leading-relaxed mb-5">{service.description}</p>
+
+            <ul class="space-y-2" aria-label={`${service.title} includes`}>
+              {service.items.map((item) => (
+                <li class="flex items-center gap-2.5 text-sm text-white/55">
+                  <span class={`w-1 h-1 rounded-full shrink-0 ${c.link}`} aria-hidden="true"></span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href="#contact"
+              class={`mt-6 inline-flex items-center gap-1.5 text-sm font-medium ${c.link} hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-current rounded`}
+              aria-label={`Get a quote for ${service.title}`}
+            >
+              Get a Quote
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </a>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

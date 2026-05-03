@@ -1,0 +1,225 @@
+---
+// Sanity.io-ready: replace with groq query in production
+// import { createClient } from '@sanity/client'
+// const client = createClient({ projectId: '...', dataset: 'production', apiVersion: '2024-01-01', useCdn: true })
+// const clips = await client.fetch(`*[_type == "audioClip"] | order(publishedAt desc)[0...12]{ title, category, description, "image": coverImage.asset->url, client, year }`)
+
+const clips = [
+  {
+    title: '30-Second National TV Spot',
+    category: 'Commercial Ad Production',
+    description: 'High-energy commercial for a nationwide retail campaign — full production from script to final deliverable.',
+    image: 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'National Retail Brand',
+    year: '2024',
+    featured: true,
+  },
+  {
+    title: 'Urban FM Station Imaging Package',
+    category: 'Radio Imaging and Promos',
+    description: 'Complete station imaging suite — sweepers, liners, drop-ins, and branded IDs for a top-40 urban format.',
+    image: 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'FM Radio Station',
+    year: '2024',
+    featured: false,
+  },
+  {
+    title: 'Cinematic Game Soundscape',
+    category: 'Sound Design',
+    description: 'Immersive original soundscape and effects library for an indie game release across PC and console platforms.',
+    image: 'https://images.pexels.com/photos/3944091/pexels-photo-3944091.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Indie Game Studio',
+    year: '2023',
+    featured: false,
+  },
+  {
+    title: 'Self-Help Audiobook Series',
+    category: 'Audiobook',
+    description: 'Three-volume personal development series — voice direction, recording, editing, and mastering for ACX/Audible.',
+    image: 'https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Independent Author',
+    year: '2024',
+    featured: false,
+  },
+  {
+    title: 'Internal Training Audio Series',
+    category: 'Corporate Audio',
+    description: 'Twelve-module onboarding and compliance audio series for a Fortune 500 company\'s global workforce.',
+    image: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Fortune 500 Corporation',
+    year: '2023',
+    featured: false,
+  },
+  {
+    title: 'R&B Full-Length Album',
+    category: 'Music Production',
+    description: 'Complete production for an 11-track R&B album — arrangement, recording, mixing, and mastering.',
+    image: 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Independent Artist',
+    year: '2024',
+    featured: false,
+  },
+  {
+    title: 'Auto Dealer Radio Campaign',
+    category: 'Commercial Ad Production',
+    description: 'Regional campaign package — six 60-second and four 30-second spots with seasonal rotation.',
+    image: 'https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Auto Dealer Group',
+    year: '2023',
+    featured: false,
+  },
+  {
+    title: 'Gospel Format Promo Suite',
+    category: 'Radio Imaging and Promos',
+    description: 'Full gospel-format imaging package with custom voiceovers, music beds, and seasonal promos.',
+    image: 'https://images.pexels.com/photos/1751731/pexels-photo-1751731.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Gospel Radio Network',
+    year: '2023',
+    featured: false,
+  },
+  {
+    title: 'Documentary Score & Foley',
+    category: 'Sound Design',
+    description: 'Original score and full foley work for a feature documentary airing on public television.',
+    image: 'https://images.pexels.com/photos/2263436/pexels-photo-2263436.jpeg?auto=compress&cs=tinysrgb&w=600',
+    client: 'Public Television',
+    year: '2024',
+    featured: false,
+  },
+];
+
+const categories = [
+  'All',
+  'Commercial Ad Production',
+  'Radio Imaging and Promos',
+  'Sound Design',
+  'Audiobook',
+  'Corporate Audio',
+  'Music Production',
+];
+---
+
+<section
+  id="portfolio"
+  class="relative py-24 lg:py-32 bg-mesh-portfolio"
+  aria-labelledby="portfolio-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-darker/90 via-transparent to-brand-darker pointer-events-none" aria-hidden="true"></div>
+
+  <div
+    class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+    x-data="{ activeFilter: 'All' }"
+  >
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-purple-light"></span>
+        <span class="font-mono text-xs text-brand-purple-light tracking-widest uppercase">Our Work</span>
+      </div>
+      <h2 id="portfolio-heading" class="font-display text-4xl sm:text-5xl font-bold text-white">
+        Production <span class="text-brand-purple-light">Portfolio</span>
+      </h2>
+      <p class="mt-4 font-body text-white/50 max-w-xl mx-auto">
+        Broadcast-quality audio across every discipline. Click a category to filter by production type.
+      </p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12" role="tablist" aria-label="Filter portfolio by category">
+      {categories.map((cat) => (
+        <button
+          @click={`activeFilter = '${cat}'`}
+          :class={`activeFilter === '${cat}' ? 'bg-brand-purple text-white border-brand-purple shadow-lg shadow-brand-purple/25' : 'bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/8 hover:text-white'`}
+          class="px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple"
+          role="tab"
+          :aria-selected={`activeFilter === '${cat}'`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Portfolio grid -->
+    <div
+      class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      role="tabpanel"
+      aria-label="Portfolio items"
+    >
+      {clips.map((clip, i) => (
+        <article
+          x-show={`activeFilter === 'All' || activeFilter === '${clip.category}'`}
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          class={`group rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm overflow-hidden hover:border-brand-purple/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-purple/10 ${clip.featured ? 'ring-1 ring-brand-purple/30' : ''}`}
+          aria-label={`${clip.title} – ${clip.category}`}
+        >
+          <!-- Image -->
+          <div class="relative h-44 overflow-hidden">
+            <img
+              src={clip.image}
+              alt={`${clip.title} project cover`}
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              loading={i < 3 ? 'eager' : 'lazy'}
+              decoding="async"
+              width="600"
+              height="400"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+            {clip.featured && (
+              <div class="absolute top-3 left-3 px-2 py-1 rounded-md bg-brand-purple/30 border border-brand-purple/50 backdrop-blur-sm">
+                <span class="font-mono text-[9px] text-brand-purple-light tracking-widest uppercase">Featured</span>
+              </div>
+            )}
+
+            <!-- Play button overlay -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div class="w-12 h-12 rounded-full bg-brand-purple/80 backdrop-blur-sm flex items-center justify-center shadow-lg">
+                <svg class="w-5 h-5 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M8 5v14l11-7z"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Category badge bottom -->
+            <div class="absolute bottom-3 left-3 px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm">
+              <span class="font-mono text-[9px] text-white/70 tracking-wider">{clip.category}</span>
+            </div>
+          </div>
+
+          <!-- Content -->
+          <div class="p-5">
+            <div class="flex items-start justify-between gap-2 mb-2">
+              <h3 class="font-display text-base font-semibold text-white group-hover:text-brand-purple-light transition-colors duration-200 leading-snug">
+                {clip.title}
+              </h3>
+              <span class="font-mono text-[10px] text-white/25 shrink-0 mt-0.5">{clip.year}</span>
+            </div>
+            <p class="font-body text-sm text-white/45 leading-relaxed line-clamp-2">
+              {clip.description}
+            </p>
+            <div class="mt-3 flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-brand-purple/60" aria-hidden="true"></span>
+              <span class="font-mono text-[10px] text-white/35 tracking-wide">{clip.client}</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-14">
+      <p class="font-body text-white/35 mb-4">Ready to add your project to this roster?</p>
+      <a
+        href="#contact"
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-purple text-white font-semibold hover:bg-brand-purple-dark transition-all duration-200 shadow-xl shadow-brand-purple/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker"
+      >
+        Start a Project
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,126 @@
+---
+---
+
+<section
+  id="about"
+  class="relative py-24 lg:py-32 overflow-hidden"
+  aria-labelledby="about-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-black via-brand-darker to-brand-darker pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute top-0 right-0 w-96 h-96 rounded-full bg-brand-purple/5 blur-3xl pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute bottom-0 left-0 w-80 h-80 rounded-full bg-violet-500/5 blur-3xl pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Left: Image collage -->
+      <div class="relative">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="space-y-4">
+            <div class="rounded-2xl overflow-hidden aspect-[3/4]">
+              <img
+                src="https://images.pexels.com/photos/3756766/pexels-photo-3756766.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="Beth Jordan in the studio"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="530"
+              />
+            </div>
+            <div class="rounded-2xl overflow-hidden aspect-square">
+              <img
+                src="https://images.pexels.com/photos/4348401/pexels-photo-4348401.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="Recording session in progress"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="400"
+              />
+            </div>
+          </div>
+          <div class="space-y-4 pt-8">
+            <div class="rounded-2xl overflow-hidden aspect-square">
+              <img
+                src="https://images.pexels.com/photos/3944091/pexels-photo-3944091.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="Professional audio equipment"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="400"
+              />
+            </div>
+            <div class="rounded-2xl overflow-hidden aspect-[3/4]">
+              <img
+                src="https://images.pexels.com/photos/1763075/pexels-photo-1763075.jpeg?auto=compress&cs=tinysrgb&w=400"
+                alt="Professional mixing console"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="530"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Floating stat -->
+        <div class="absolute -bottom-4 -right-4 lg:right-0 rounded-xl bg-white/[0.06] border border-white/15 backdrop-blur-xl p-4 shadow-2xl" aria-label="15 years of experience">
+          <div class="font-display text-3xl font-bold text-white">15+</div>
+          <div class="font-body text-xs text-white/45 tracking-wide">Years in Media</div>
+        </div>
+      </div>
+
+      <!-- Right: Content -->
+      <div class="space-y-8">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/15 mb-4">
+            <span class="font-mono text-xs text-white/50 tracking-widest uppercase">Our Story</span>
+          </div>
+          <h2 id="about-heading" class="font-display text-4xl sm:text-5xl font-bold text-white leading-tight">
+            The Voice Behind<br/><span class="text-brand-purple-light">The Sound</span>
+          </h2>
+        </div>
+
+        <div class="space-y-5 font-body text-white/55 leading-[1.75]">
+          <p>
+            Beth Jordan Productions was built on a conviction: every word spoken and every sound crafted deserves the highest level of care. For over 15 years, we've served as the production backbone for brands, broadcasters, authors, and artists who demand broadcast-quality results.
+          </p>
+          <p>
+            Our six production disciplines aren't separate departments — they're a unified creative approach. Whether we're scoring a documentary, building a radio station's identity, or recording chapter one of your audiobook, the same standard of excellence applies.
+          </p>
+          <p>
+            We don't just produce audio. We produce impact.
+          </p>
+        </div>
+
+        <!-- Values -->
+        <div class="grid grid-cols-2 gap-4">
+          {[
+            { label: 'Broadcast Quality', desc: 'Every deliverable meets industry broadcast standards.' },
+            { label: 'Deadline-Driven', desc: 'Rush delivery available across all disciplines.' },
+            { label: 'Client-Focused', desc: 'Your creative vision is always the north star.' },
+            { label: 'Full-Service', desc: 'Concept through final master, all under one roof.' },
+          ].map((val) => (
+            <div class="rounded-xl bg-white/[0.03] border border-white/8 p-4">
+              <div class="font-display text-sm font-semibold text-white mb-1">{val.label}</div>
+              <div class="font-body text-xs text-white/38 leading-relaxed">{val.desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <a
+          href="#contact"
+          class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-brand-purple text-white font-medium text-sm hover:bg-brand-purple-dark transition-all duration-200 shadow-lg shadow-brand-purple/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker"
+        >
+          Work With Beth Jordan
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

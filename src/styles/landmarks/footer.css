@@ -1,6 +1,0 @@
-@reference "tailwindcss";
-@reference "@styles/base/content.css";
-
-footer {
-  @apply content;
-}

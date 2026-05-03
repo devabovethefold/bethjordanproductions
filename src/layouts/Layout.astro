@@ -1,0 +1,186 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Beth Jordan Productions | Professional Media Production',
+  description = 'Award-winning media production company specializing in commercial ad production, radio imaging, sound design, audiobooks, corporate audio, and music production.',
+  image = '/og-image.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://bethjordanproductions.com');
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD: Production Company -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProductionCompany",
+        "name": "Beth Jordan Productions",
+        "description": "Award-winning professional media production company specializing in commercial ad production, radio imaging, sound design, audiobooks, corporate audio, and music production.",
+        "url": "https://bethjordanproductions.com",
+        "logo": "https://bethjordanproductions.com/favicon.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": "English"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Production Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Commercial Ad Production" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Radio Imaging and Promos" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sound Design" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Audiobook Production" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate Audio" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Music Production" } }
+          ]
+        }
+      }
+    </script>
+  </head>
+
+  <body class="bg-brand-darker text-white font-body antialiased overflow-x-hidden">
+    <!-- Canvas Spectrum Analyzer Background -->
+    <canvas
+      id="spectrum-canvas"
+      class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-50"
+      aria-hidden="true"
+    ></canvas>
+
+    <!-- Skip link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Main content layer -->
+    <div class="relative z-10">
+      <slot />
+    </div>
+
+    <script>
+      (function () {
+        const canvas = document.getElementById('spectrum-canvas') as HTMLCanvasElement;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const BAR_COUNT = 80;
+        const BAR_GAP = 2;
+        let simPhase = 0;
+
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function getSimulatedData(): number[] {
+          simPhase += 0.012;
+          const bars: number[] = [];
+          for (let i = 0; i < BAR_COUNT; i++) {
+            const p = i / BAR_COUNT;
+            const bell = Math.exp(-Math.pow(p - 0.5, 2) / 0.08);
+            const w1 = Math.sin(simPhase + p * Math.PI * 3) * 0.3 + 0.7;
+            const w2 = Math.sin(simPhase * 1.7 + p * Math.PI * 5) * 0.15 + 0.85;
+            const w3 = Math.sin(simPhase * 0.5 + p * Math.PI * 1.5) * 0.2 + 0.8;
+            bars.push(bell * w1 * w2 * w3 * 0.5 + Math.random() * 0.06);
+          }
+          return bars;
+        }
+
+        function draw() {
+          requestAnimationFrame(draw);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const bars = getSimulatedData();
+          const barWidth = (canvas.width - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT;
+          const maxH = canvas.height * 0.32;
+
+          for (let i = 0; i < BAR_COUNT; i++) {
+            const x = i * (barWidth + BAR_GAP);
+            const barH = bars[i] * maxH;
+            const y = canvas.height - barH;
+            const p = i / BAR_COUNT;
+            const intensity = bars[i];
+
+            // Purple palette: deep purple → violet → light purple
+            let r: number, g: number, b: number;
+            if (p < 0.4) {
+              r = Math.round(126 + (147 - 126) * (p / 0.4));
+              g = Math.round(34 + (51 - 34) * (p / 0.4));
+              b = Math.round(206 + (234 - 206) * (p / 0.4));
+            } else if (p < 0.7) {
+              const t = (p - 0.4) / 0.3;
+              r = Math.round(147 + (168 - 147) * t);
+              g = Math.round(51 + (85 - 51) * t);
+              b = Math.round(234 + (247 - 234) * t);
+            } else {
+              const t = (p - 0.7) / 0.3;
+              r = Math.round(168 + (192 - 168) * t);
+              g = Math.round(85 + (132 - 85) * t);
+              b = Math.round(247 + (252 - 247) * t);
+            }
+
+            const alpha = 0.12 + intensity * 0.42;
+            const grad = ctx.createLinearGradient(x, y, x, canvas.height);
+            grad.addColorStop(0, `rgba(${r},${g},${b},${alpha})`);
+            grad.addColorStop(0.6, `rgba(${r},${g},${b},${alpha * 0.45})`);
+            grad.addColorStop(1, `rgba(${r},${g},${b},0.01)`);
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(x, y, barWidth, barH, 2);
+            ctx.fill();
+
+            if (intensity > 0.3) {
+              ctx.fillStyle = `rgba(${r},${g},${b},${alpha * 1.4})`;
+              ctx.beginPath();
+              ctx.arc(x + barWidth / 2, y - 2, 1.5, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+
+        draw();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,174 @@
+---
+---
+
+<section
+  id="contact"
+  class="relative py-24 lg:py-32"
+  aria-labelledby="contact-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-darker to-black pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(147,51,234,0.08)_0%,transparent_60%)] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Section header -->
+    <div class="text-center mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-purple-light"></span>
+        <span class="font-mono text-xs text-brand-purple-light tracking-widest uppercase">Get In Touch</span>
+      </div>
+      <h2 id="contact-heading" class="font-display text-4xl sm:text-5xl font-bold text-white">
+        Let's Make <span class="text-brand-purple-light">Something</span>
+      </h2>
+      <p class="mt-4 font-body text-white/50 max-w-lg mx-auto">
+        Ready to produce? Tell us about your project and we'll respond within 24 hours.
+      </p>
+    </div>
+
+    <!-- Contact form -->
+    <div
+      class="rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-xl p-8 lg:p-12 relative overflow-hidden"
+      x-data="{
+        name: '',
+        email: '',
+        service: '',
+        message: '',
+        submitted: false,
+        submitting: false,
+        async submit() {
+          if (!this.name || !this.email || !this.message) return;
+          this.submitting = true;
+          await new Promise(r => setTimeout(r, 900));
+          this.submitting = false;
+          this.submitted = true;
+        }
+      }"
+    >
+      <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-brand-purple/40 to-transparent" aria-hidden="true"></div>
+
+      <!-- Success state -->
+      <div x-show="submitted" x-transition class="text-center py-12">
+        <div class="w-16 h-16 rounded-full bg-brand-purple/15 border border-brand-purple/35 flex items-center justify-center mx-auto mb-6">
+          <svg class="w-8 h-8 text-brand-purple-light" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">Message Received!</h3>
+        <p class="font-body text-white/45">We'll be in touch within 24 hours.</p>
+      </div>
+
+      <!-- Form -->
+      <form
+        x-show="!submitted"
+        @submit.prevent="submit()"
+        class="space-y-6"
+        novalidate
+        aria-label="Contact form"
+      >
+        <div class="grid sm:grid-cols-2 gap-6">
+          <div>
+            <label for="contact-name" class="block font-body text-sm text-white/65 mb-2">
+              Full Name <span class="text-brand-purple-light" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="contact-name"
+              type="text"
+              x-model="name"
+              required
+              autocomplete="name"
+              class="w-full bg-white/[0.05] border border-white/12 rounded-xl px-4 py-3 font-body text-sm text-white placeholder-white/22 focus:outline-none focus:border-brand-purple/60 focus:ring-1 focus:ring-brand-purple/40 transition-colors"
+              placeholder="Your name"
+              aria-required="true"
+            />
+          </div>
+
+          <div>
+            <label for="contact-email" class="block font-body text-sm text-white/65 mb-2">
+              Email Address <span class="text-brand-purple-light" aria-hidden="true">*</span>
+            </label>
+            <input
+              id="contact-email"
+              type="email"
+              x-model="email"
+              required
+              autocomplete="email"
+              class="w-full bg-white/[0.05] border border-white/12 rounded-xl px-4 py-3 font-body text-sm text-white placeholder-white/22 focus:outline-none focus:border-brand-purple/60 focus:ring-1 focus:ring-brand-purple/40 transition-colors"
+              placeholder="you@example.com"
+              aria-required="true"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label for="contact-service" class="block font-body text-sm text-white/65 mb-2">
+            Service Needed
+          </label>
+          <select
+            id="contact-service"
+            x-model="service"
+            class="w-full bg-white/[0.05] border border-white/12 rounded-xl px-4 py-3 font-body text-sm text-white/80 focus:outline-none focus:border-brand-purple/60 focus:ring-1 focus:ring-brand-purple/40 transition-colors appearance-none cursor-pointer"
+            style="background-image: url('data:image/svg+xml,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'rgba(255,255,255,0.35)\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/></svg>'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem;"
+          >
+            <option value="" class="bg-brand-dark text-white/50">Select a service...</option>
+            <option value="commercial" class="bg-brand-dark text-white">Commercial Ad Production</option>
+            <option value="imaging" class="bg-brand-dark text-white">Radio Imaging and Promos</option>
+            <option value="sound-design" class="bg-brand-dark text-white">Sound Design</option>
+            <option value="audiobook" class="bg-brand-dark text-white">Audiobook Production</option>
+            <option value="corporate" class="bg-brand-dark text-white">Corporate Audio</option>
+            <option value="music" class="bg-brand-dark text-white">Music Production</option>
+            <option value="other" class="bg-brand-dark text-white">Other / Multiple Services</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="contact-message" class="block font-body text-sm text-white/65 mb-2">
+            Project Details <span class="text-brand-purple-light" aria-hidden="true">*</span>
+          </label>
+          <textarea
+            id="contact-message"
+            x-model="message"
+            required
+            rows="5"
+            class="w-full bg-white/[0.05] border border-white/12 rounded-xl px-4 py-3 font-body text-sm text-white placeholder-white/22 focus:outline-none focus:border-brand-purple/60 focus:ring-1 focus:ring-brand-purple/40 transition-colors resize-none"
+            placeholder="Tell us about your project, timeline, and goals..."
+            aria-required="true"
+          ></textarea>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <button
+            type="submit"
+            :disabled="submitting || !name || !email || !message"
+            class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-brand-purple text-white font-semibold text-sm hover:bg-brand-purple-dark disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-lg shadow-brand-purple/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker flex items-center justify-center gap-2"
+          >
+            <span x-show="!submitting">Send Message</span>
+            <span x-show="submitting">Sending...</span>
+            <svg x-show="!submitting" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+            </svg>
+            <svg x-show="submitting" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+            </svg>
+          </button>
+          <p class="font-body text-xs text-white/28">We respond within 24 hours. No spam, ever.</p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Alt contact methods -->
+    <div class="mt-10 grid sm:grid-cols-3 gap-4 text-center">
+      {[
+        { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`, label: 'Email', value: 'info@bethjordanproductions.com' },
+        { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>`, label: 'Phone', value: '(555) 000-0000' },
+        { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>`, label: 'Location', value: 'United States' },
+      ].map((item) => (
+        <div class="rounded-xl bg-white/[0.03] border border-white/8 p-4">
+          <div class="flex items-center justify-center mb-2">
+            <svg class="w-5 h-5 text-white/35" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" set:html={item.icon}></svg>
+          </div>
+          <div class="font-display text-xs font-semibold text-white/45 uppercase tracking-wider mb-1">{item.label}</div>
+          <div class="font-body text-sm text-white/65">{item.value}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
