@@ -56,7 +56,7 @@ const colorClasses: Record<string, { icon: string; border: string; tag: string; 
         <span class="font-mono text-xs text-brand-purple-light tracking-widest uppercase">What We Do</span>
       </div>
       <h2 id="services-heading" class="font-display text-4xl sm:text-5xl font-bold text-white">
-        Seven Disciplines. <span class="text-brand-purple-light">One Standard.</span>
+        Complete Audio Solutions. <span class="text-brand-purple-light">One Standard.</span>
       </h2>
       <p class="mt-4 font-body text-white/50 max-w-xl mx-auto">
         Every service delivered with broadcast precision and creative excellence.
@@ -64,7 +64,7 @@ const colorClasses: Record<string, { icon: string; border: string; tag: string; 
     </div>
 
     <!-- Services grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" role="list">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto" role="list">
       {services.map((service) => {
         const c = colorClasses[service.color] ?? colorClasses['purple'];
         return (
