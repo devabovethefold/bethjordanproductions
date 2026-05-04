@@ -1,0 +1,74 @@
+---
+---
+
+<section
+  id="hero"
+  class="relative min-h-screen flex items-center bg-mesh-hero"
+  aria-labelledby="hero-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-darker/80 via-transparent to-brand-darker/90 pointer-events-none" aria-hidden="true"></div>
+
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 lg:py-40 w-full">
+    <div class="max-w-4xl mx-auto text-center">
+
+      <!-- Brand tag -->
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-8">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-purple-light"></span>
+        <span class="font-mono text-xs text-brand-purple-light tracking-widest uppercase">Professional Media Production</span>
+      </div>
+
+      <!-- Heading -->
+      <h1 id="hero-heading" class="font-display text-6xl sm:text-7xl lg:text-8xl font-bold leading-none tracking-tight text-white">
+        More Than
+        <span class="block text-transparent bg-clip-text" style="background-image: linear-gradient(135deg, #9333EA, #A855F7, #C084FC);">
+          Just A Voice.
+        </span>
+      </h1>
+
+      <p class="mt-8 font-body text-xl text-white/55 leading-relaxed max-w-3xl mx-auto">
+        Broadcast-ready voiceovers, radio & podcast ad production, and expert copy — Beth Jordan delivers complete audio solutions that resonate, captivate, and convert.
+      </p>
+
+      <div class="mt-10 flex flex-wrap gap-4 justify-center">
+        <a
+          href="#portfolio"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-brand-purple text-white font-medium hover:bg-brand-purple-dark transition-all duration-200 shadow-xl shadow-brand-purple/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker"
+        >
+          Hear Our Work
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a
+          href="#services"
+          class="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white/5 border border-white/15 text-white/80 font-medium hover:bg-white/10 hover:text-white transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker"
+        >
+          Our Services
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="mt-16 flex flex-wrap gap-x-12 gap-y-6 justify-center">
+        {[
+          { num: '15+', label: 'Years Experience' },
+          { num: '500+', label: 'Projects Delivered' },
+          { num: '6', label: 'Production Disciplines' },
+          { num: '100%', label: 'Broadcast-Ready Output' },
+        ].map((stat) => (
+          <div>
+            <div class="font-display text-3xl font-bold text-white">{stat.num}</div>
+            <div class="font-body text-xs text-white/35 uppercase tracking-wider mt-1">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/25" aria-hidden="true">
+    <span class="font-mono text-[10px] tracking-widest uppercase">Scroll</span>
+    <svg class="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 9l-7 7-7-7"/>
+    </svg>
+  </div>
+</section>

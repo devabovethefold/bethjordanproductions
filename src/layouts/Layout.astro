@@ -1,0 +1,195 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = 'Beth Jordan Productions | Professional Media Production',
+  description = 'Award-winning media production company specializing in commercial ad production, radio imaging, sound design, audiobooks, corporate audio, and music production.',
+  image = '/og-image.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? 'https://bethjordanproductions.com');
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD: Production Company -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProductionCompany",
+        "name": "Beth Jordan Productions",
+        "description": "Award-winning professional media production company specializing in commercial ad production, radio imaging, sound design, audiobooks, corporate audio, and music production.",
+        "url": "https://bethjordanproductions.com",
+        "logo": "https://bethjordanproductions.com/favicon.svg",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer service",
+          "availableLanguage": "English"
+        },
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Production Services",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Commercial Ad Production" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Radio Imaging and Promos" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sound Design" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Audiobook Production" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Corporate Audio" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Music Production" } }
+          ]
+        }
+      }
+    </script>
+  </head>
+
+  <body class="bg-brand-darker text-white font-body antialiased overflow-x-hidden">
+    <!-- Canvas Spectrum Analyzer Background -->
+    <canvas
+      id="spectrum-canvas"
+      class="fixed inset-0 w-full h-full pointer-events-none z-0"
+      aria-hidden="true"
+    ></canvas>
+
+    <!-- Skip link -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Main content layer -->
+    <div class="relative z-10">
+      <slot />
+    </div>
+
+    <script>
+      (function () {
+        const canvas = document.getElementById('spectrum-canvas') as HTMLCanvasElement;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const BAR_COUNT = 27;
+        const BAR_GAP = 2;
+        let simPhase = 0;
+        const currentBars = new Array(BAR_COUNT).fill(0);
+
+        function resize() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function getSimulatedData(): number[] {
+          simPhase += 0.035; // Faster speed
+          for (let i = 0; i < BAR_COUNT; i++) {
+            const p = i / BAR_COUNT;
+            
+            // More complex, musical simulation using multiple octaves
+            const bell = Math.exp(-Math.pow(p - 0.5, 2) / 0.15);
+            
+            // Primary wave
+            const w1 = Math.sin(simPhase + p * Math.PI * 1.5) * 0.4 + 0.6;
+            // High frequency "noise" wave
+            const w2 = Math.sin(simPhase * 2.4 + p * Math.PI * 8) * 0.15 + 0.85;
+            // Occasional "bass" pulse
+            const w3 = Math.sin(simPhase * 0.4) > 0.8 ? 1.2 : 1.0;
+            // Extra chaotic jitter for the "visualizer" look
+            const jitter = Math.sin(simPhase * 5.0 + i) * 0.1;
+
+            const target = bell * w1 * w2 * w3 * 0.7 + jitter;
+
+            // Smoothing: Extremely fast rise, moderate fall for that "punchy" look
+            if (target > currentBars[i]) {
+              currentBars[i] += (target - currentBars[i]) * 0.4; // Fast rise
+            } else {
+              currentBars[i] += (target - currentBars[i]) * 0.08; // Slower fall
+            }
+            
+            // Clamp
+            currentBars[i] = Math.max(0.01, Math.min(1, currentBars[i]));
+          }
+          return [...currentBars];
+        }
+
+        function draw() {
+          requestAnimationFrame(draw);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const bars = getSimulatedData();
+          const barWidth = (canvas.width - BAR_GAP * (BAR_COUNT - 1)) / BAR_COUNT;
+          // Half the height: previous was 1.25
+          const maxH = canvas.height * 0.6;
+
+          for (let i = 0; i < BAR_COUNT; i++) {
+            const x = i * (barWidth + BAR_GAP);
+            const barH = bars[i] * maxH;
+            const y = canvas.height - barH;
+            const intensity = bars[i];
+            const p = i / BAR_COUNT;
+
+            // Horizontal transition: White (#FFFFFF) on left to Purple (#9333EA) on right
+            const r = Math.round(255 + (147 - 255) * p);
+            const g = Math.round(255 + (51 - 255) * p);
+            const b = Math.round(255 + (234 - 255) * p);
+
+            const alpha = Math.min(1, 0.25 + intensity * 0.75);
+            const grad = ctx.createLinearGradient(x, y, x, canvas.height);
+            
+            // Solid color at the top, fading to the bottom
+            grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha})`);
+            grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0.01)`);
+
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.roundRect(x, y, barWidth, barH, 1.5);
+            ctx.fill();
+
+            // Peak cap remains white/bright for visibility
+            if (intensity > 0.05) {
+              ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha * 1.2})`;
+              ctx.beginPath();
+              ctx.roundRect(x, y - 1, barWidth, 2, 1);
+              ctx.fill();
+            }
+          }
+        }
+
+        draw();
+      })();
+    </script>
+  </body>
+</html>
