@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-purple: #9333EA;
-  --color-brand-purple-light: #A855F7;
-  --color-brand-purple-dark: #7E22CE;
-  --color-brand-amber: #F4A261;
-  --color-brand-gold: #E9C46A;
-  --color-brand-cyan: #2EC4B6;
-  --color-brand-blue: #1D7EBF;
-  --color-brand-dark: #0A0A0F;
-  --color-brand-darker: #06060A;
+  --color-brand-purple: #9333ea;
+  --color-brand-purple-light: #a855f7;
+  --color-brand-purple-dark: #7e22ce;
+  --color-brand-amber: #f4a261;
+  --color-brand-gold: #e9c46a;
+  --color-brand-cyan: #2ec4b6;
+  --color-brand-blue: #1d7ebf;
+  --color-brand-dark: #0a0a0f;
+  --color-brand-darker: #06060a;
 
   --font-display: "Oswald", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -19,19 +19,58 @@
   --animate-fade-up: fadeUp 0.6s ease-out forwards;
   --animate-glow: glow 2s ease-in-out infinite alternate;
 
-  --background-image-mesh-hero: radial-gradient(ellipse at 20% 50%, rgba(147, 51, 234, 0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(30, 126, 191, 0.10) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
-  --background-image-mesh-portfolio: radial-gradient(ellipse at 80% 20%, rgba(233, 196, 106, 0.10) 0%, transparent 50%), radial-gradient(ellipse at 20% 80%, rgba(147, 51, 234, 0.08) 0%, transparent 50%);
-  --background-image-mesh-services: radial-gradient(ellipse at 50% 0%, rgba(147, 51, 234, 0.08) 0%, transparent 60%);
+  --background-image-mesh-hero:
+    radial-gradient(
+      ellipse at 20% 50%,
+      rgba(147, 51, 234, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(30, 126, 191, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 50% 80%,
+      rgba(168, 85, 247, 0.08) 0%,
+      transparent 50%
+    );
+  --background-image-mesh-portfolio:
+    radial-gradient(
+      ellipse at 80% 20%,
+      rgba(233, 196, 106, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 20% 80%,
+      rgba(147, 51, 234, 0.08) 0%,
+      transparent 50%
+    );
+  --background-image-mesh-services: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(147, 51, 234, 0.08) 0%,
+    transparent 60%
+  );
 }
 
 @keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(24px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes glow {
-  0% { box-shadow: 0 0 20px rgba(147,51,234,0.3); }
-  100% { box-shadow: 0 0 40px rgba(147,51,234,0.6); }
+  0% {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(147, 51, 234, 0.6);
+  }
 }
 
 /* Skip link */
@@ -41,7 +80,7 @@
   left: 1rem;
   z-index: 9999;
   padding: 0.5rem 1rem;
-  background: #9333EA;
+  background: #9333ea;
   color: white;
   font-weight: 600;
   border-radius: 0 0 0.5rem 0.5rem;
@@ -53,26 +92,42 @@
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #06060A; }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.22); }
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #06060a;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
 
 /* Volume slider */
-input[type="range"] { -webkit-appearance: none; appearance: none; }
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: #9333EA;
+  background: #9333ea;
   cursor: pointer;
-  box-shadow: 0 0 6px rgba(147,51,234,0.5);
+  box-shadow: 0 0 6px rgba(147, 51, 234, 0.5);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 14px; height: 14px; border-radius: 50%;
-  background: #9333EA; cursor: pointer; border: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #9333ea;
+  cursor: pointer;
+  border: none;
 }
 
 /* Line clamp */
@@ -85,10 +140,18 @@ input[type="range"]::-moz-range-thumb {
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  html { scroll-behavior: auto; }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+p {
+  text-wrap: balance;
 }
