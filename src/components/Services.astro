@@ -9,6 +9,14 @@ const services = [
     color: 'purple',
   },
   {
+    icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>`,
+    title: 'Audio Ad Production',
+    tagline: 'Radio & Podcast.',
+    description: 'Full-service production for high-impact advertisements. I turn concepts into polished, broadcast-ready audio that captures attention and drives results.',
+    items: ['Radio Spots (30/60s)', 'Podcast Sponsor Reads', 'Dynamic Ad Insertion', 'Creative Direction'],
+    color: 'cyan',
+  },
+  {
     icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>`,
     title: 'Audio Editing & Sound Design',
     tagline: 'Polished & Professional.',
@@ -38,6 +46,7 @@ const colorClasses: Record<string, { icon: string; border: string; tag: string; 
   purple:  { icon: 'bg-brand-purple/15 border-brand-purple/35 text-brand-purple-light',   border: 'hover:border-brand-purple/30',   tag: 'bg-brand-purple/10 border-brand-purple/25 text-brand-purple-light',   link: 'text-brand-purple-light', hover: 'hover:shadow-brand-purple/10' },
   violet:  { icon: 'bg-violet-500/15 border-violet-500/35 text-violet-300',               border: 'hover:border-violet-500/30',     tag: 'bg-violet-500/10 border-violet-500/25 text-violet-300',               link: 'text-violet-300',         hover: 'hover:shadow-violet-500/10' },
   fuchsia: { icon: 'bg-fuchsia-500/15 border-fuchsia-500/35 text-fuchsia-300',            border: 'hover:border-fuchsia-500/30',   tag: 'bg-fuchsia-500/10 border-fuchsia-500/25 text-fuchsia-300',            link: 'text-fuchsia-300',        hover: 'hover:shadow-fuchsia-500/10' },
+  cyan:    { icon: 'bg-brand-cyan/15 border-brand-cyan/35 text-brand-cyan',               border: 'hover:border-brand-cyan/30',     tag: 'bg-brand-cyan/10 border-brand-cyan/25 text-brand-cyan',               link: 'text-brand-cyan',         hover: 'hover:shadow-brand-cyan/10' },
 };
 ---
 
@@ -64,12 +73,12 @@ const colorClasses: Record<string, { icon: string; border: string; tag: string; 
     </div>
 
     <!-- Services grid -->
-    <div class="grid sm:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto" role="list">
+    <div class="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto" role="list">
       {services.map((service) => {
         const c = colorClasses[service.color] ?? colorClasses['purple'];
         return (
           <div
-            class={`group rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm p-6 ${c.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${c.hover} relative overflow-hidden`}
+            class={`group rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm p-6 ${c.border} transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl ${c.hover} relative overflow-hidden w-full sm:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]`}
             role="listitem"
           >
             <!-- Top accent on hover -->
