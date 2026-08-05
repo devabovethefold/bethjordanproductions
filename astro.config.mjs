@@ -22,6 +22,17 @@ export default defineConfig({
   ],
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/kysely')) {
+              return 'kysely';
+            }
+          }
+        }
+      }
+    },
     server: {
       watch: {
         ignored: ['**/emdash-env.d.ts', '**/.wrangler/**'],
