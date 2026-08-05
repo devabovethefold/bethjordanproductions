@@ -1,13 +1,23 @@
 {
   "name": "bethjordanproductions",
+  "main": "dist/server/entry.mjs",
   "compatibility_date": "2026-08-05",
   "compatibility_flags": [
     "nodejs_compat",
     "nodejs_compat_populate_process_env"
   ],
+  "assets": {
+    "directory": "dist/client"
+  },
   "vars": {
     "EMDASH_SITE_URL": "http://localhost:4321"
   },
+  "kv_namespaces": [
+    {
+      "binding": "SESSION",
+      "id": "6f35b36a23dc46adafc4670ba0974d9e"
+    }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
