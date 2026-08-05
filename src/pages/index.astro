@@ -1,139 +1,23 @@
 ---
+import { getEmDashCollection } from 'emdash';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
-import Portfolio from '../components/Portfolio.astro';
-import Services from '../components/Services.astro';
+import Showcase from '../components/Showcase.astro';
 import About from '../components/About.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 
-import { getEmDashCollection } from 'emdash';
-import AudioPlayer from '../components/AudioPlayer.astro';
-
-let posts = [];
-let fetchError = null;
-try {
-  const result = await getEmDashCollection('posts', {
-    status: 'published',
-  });
-  posts = result.entries || [];
-} catch (err) {
-  fetchError = err;
-  console.error('Failed to fetch posts from EmDash:', err);
-}
+const { entries: posts } = await getEmDashCollection('posts', {
+  orderBy: { published_at: 'desc' }
+});
 ---
 
 <Layout>
   <Nav />
   <main id="main-content">
     <Hero />
-    
-    <!-- Audio & Video Posts Section -->
-    <section id="audio-posts" class="py-24 bg-brand-darker border-t border-slate-900" aria-labelledby="audio-posts-heading">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-3xl mx-auto text-center mb-16">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-4">
-            <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse"></span>
-            <span class="font-mono text-xs text-brand-cyan tracking-widest uppercase">Podcast & Updates</span>
-          </div>
-          <h2 id="audio-posts-heading" class="font-display text-4xl sm:text-5xl font-bold tracking-tight text-white">
-            Latest Broadcasts & Audio Posts
-          </h2>
-          <p class="mt-4 font-body text-lg text-white/55">
-            Stream full-length podcast episodes, media projects, and video uploads from Beth Jordan.
-          </p>
-        </div>
-
-        {posts.length > 0 ? (
-          <div class="space-y-12">
-            {posts.map((post) => (
-              <div class="flex justify-center">
-                {post.data.media_file ? (
-                  post.data.media_file.mimeType?.startsWith('video/') ? (
-                    <div class="max-w-2xl w-full bg-brand-dark border border-slate-800/80 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-brand-purple/10 hover:border-brand-purple/30 transition-all duration-300 group">
-                      <div class="relative aspect-video bg-black">
-                        <video controls class="w-full h-full object-cover">
-                          <source src={post.data.media_file.src} type={post.data.media_file.mimeType} />
-                          Your browser does not support the video tag.
-                        </video>
-                      </div>
-                      <div class="p-6">
-                        <div class="flex justify-between items-center gap-4">
-                          <span class="text-xs font-semibold tracking-wider uppercase text-brand-cyan">Video Broadcast</span>
-                          {post.publishedAt && (
-                            <span class="text-xs font-mono text-slate-500">
-                              {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                                month: 'short',
-                                day: 'numeric',
-                                year: 'numeric'
-                              })}
-                            </span>
-                          )}
-                        </div>
-                        <h3 class="text-xl font-bold text-white mt-2 group-hover:text-brand-purple-light transition duration-300">
-                          {post.data.title}
-                        </h3>
-                        {post.data.excerpt && (
-                          <p class="text-sm text-slate-400 mt-2 line-clamp-3">{post.data.excerpt}</p>
-                        )}
-                      </div>
-                    </div>
-                  ) : (
-                    <AudioPlayer 
-                      src={post.data.media_file.src} 
-                      title={post.data.title} 
-                      excerpt={post.data.excerpt}
-                      publishDate={post.publishedAt}
-                    />
-                  )
-                ) : (
-                  <div class="max-w-2xl w-full bg-brand-dark border border-slate-800/80 rounded-2xl p-6 shadow-xl hover:shadow-2xl hover:shadow-brand-purple/10 hover:border-brand-purple/30 transition-all duration-300 group">
-                    <div class="flex justify-between items-start gap-4 mb-2">
-                      <span class="text-xs font-semibold tracking-wider uppercase text-brand-purple-light">Article</span>
-                      {post.publishedAt && (
-                        <span class="text-xs font-mono text-slate-500">
-                          {new Date(post.publishedAt).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </span>
-                      )}
-                    </div>
-                    <h3 class="text-xl font-bold text-white group-hover:text-brand-purple-light transition duration-300">
-                      {post.data.title}
-                    </h3>
-                    {post.data.excerpt && (
-                      <p class="text-sm text-slate-400 mt-2 line-clamp-3">{post.data.excerpt}</p>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div class="max-w-lg mx-auto text-center p-8 border border-dashed border-slate-800 rounded-2xl bg-brand-dark/30">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-slate-600 mx-auto mb-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
-            </svg>
-            <h3 class="text-md font-semibold text-white">No entries published yet</h3>
-            <p class="text-sm text-slate-500 mt-1">
-              Add your first audio or video post in the admin panel.
-            </p>
-            <a 
-              href="/_emdash/admin/" 
-              class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-brand-purple/20 border border-brand-purple/40 text-brand-purple-light hover:bg-brand-purple/35 text-xs font-semibold tracking-wider uppercase transition duration-200"
-            >
-              Go to Dashboard
-            </a>
-          </div>
-        )}
-      </div>
-    </section>
-
-    <Portfolio />
-    <Services />
+    <Showcase posts={posts} />
     <About />
     <Contact />
   </main>

@@ -1,0 +1,354 @@
+---
+import { getTermsForEntries } from 'emdash';
+
+interface Post {
+  id: string;
+  data: {
+    id: string;
+    title: string;
+    excerpt?: string;
+    featured_image?: { src?: string };
+    media_file?: { src?: string; filename?: string; mimeType?: string; size?: number };
+  };
+  publishedAt: Date | null;
+}
+
+interface Props {
+  posts?: Post[];
+}
+
+const { posts = [] } = Astro.props;
+
+// Fetch category terms for all posts
+const categoriesByEntry = posts.length > 0
+  ? await getTermsForEntries('posts', posts.map(p => p.id), 'category')
+  : new Map();
+
+// Category image fallbacks
+const categoryImages: Record<string, string> = {
+  'Voiceovers': 'https://images.pexels.com/photos/3783471/pexels-photo-3783471.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'IVR/On-Hold Messaging': 'https://images.pexels.com/photos/8293693/pexels-photo-8293693.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Audiobooks': 'https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Brand Imaging/Sound Design': 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Commercial Ad Production': 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Podcast Editing': 'https://images.pexels.com/photos/3784221/pexels-photo-3784221.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Music Mixes': 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=600'
+};
+
+const allItems = posts.map((post) => {
+  const media = post.data.media_file;
+  const isVideo = media?.mimeType?.startsWith('video/') || media?.filename?.endsWith('.mov') || media?.filename?.endsWith('.mp4');
+  const isAudio = media?.mimeType?.startsWith('audio/') || media?.filename?.endsWith('.mp3');
+  
+  const terms = categoriesByEntry.get(post.id) ?? [];
+  const category = terms[0]?.name || (isVideo ? 'Music Mixes' : 'Voiceovers');
+  
+  const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
+
+  return {
+    title: post.data.title,
+    category: category,
+    description: post.data.excerpt || '',
+    image: post.data.featured_image?.src || fallbackImage,
+    client: 'Beth Jordan Productions',
+    year: post.publishedAt
+      ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric' })
+      : '',
+    type: isVideo ? 'video' : isAudio ? 'audio' : 'article',
+    audioSrc: isAudio ? media?.src : undefined,
+    videoSrc: isVideo ? media?.src : undefined,
+  };
+});
+
+const categories = [
+  'All', 
+  'Voiceovers', 
+  'IVR/On-Hold Messaging', 
+  'Audiobooks', 
+  'Brand Imaging/Sound Design', 
+  'Commercial Ad Production', 
+  'Podcast Editing', 
+  'Music Mixes'
+];
+---
+
+<section
+  id="showcase"
+  class="relative py-24 lg:py-32 bg-mesh-portfolio"
+  aria-labelledby="showcase-heading"
+>
+  <div class="absolute inset-0 bg-gradient-to-b from-brand-darker/90 via-transparent to-brand-darker pointer-events-none" aria-hidden="true"></div>
+
+  <div
+    class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+    x-data="{ activeFilter: 'All' }"
+  >
+    <!-- Section header -->
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-purple/15 border border-brand-purple/35 mb-4">
+        <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan animate-pulse"></span>
+        <span class="font-mono text-xs text-brand-cyan tracking-widest uppercase">Portfolio Showcase</span>
+      </div>
+      <h2 id="showcase-heading" class="font-display text-4xl sm:text-5xl font-bold text-white">
+        Production Portfolio. <span class="text-brand-purple-light">Hear the Difference.</span>
+      </h2>
+      <p class="mt-4 font-body text-white/50 max-w-2xl mx-auto">
+        Broadcast-quality voiceovers, audiobooks, radio imaging, sound design, and commercial productions. Click play on any audio track or video to preview.
+      </p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="flex flex-wrap justify-center gap-2 mb-12" role="tablist" aria-label="Filter portfolio by category">
+      {categories.map((cat) => (
+        <button
+          @click={`activeFilter = '${cat}'`}
+          :class={`activeFilter === '${cat}' ? 'bg-brand-purple text-white border-brand-purple shadow-lg shadow-brand-purple/25' : 'bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/8 hover:text-white'`}
+          class="px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple cursor-pointer"
+          role="tab"
+          :aria-selected={`activeFilter === '${cat}'`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    <!-- Tiles grid -->
+    <div
+      class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      role="tabpanel"
+      aria-label="Portfolio items"
+    >
+      {allItems.map((item, i) => (
+        <article
+          x-data={item.type === 'audio' && item.audioSrc ? `{
+            playing: false,
+            duration: 0,
+            currentTime: 0,
+            audio: null,
+            formatTime(secs) {
+              if (isNaN(secs) || secs === Infinity) return '0:00';
+              const m = Math.floor(secs / 60);
+              const s = Math.floor(secs % 60);
+              return \`\${m}:\${s < 10 ? '0' : ''}\${s}\`;
+            },
+            init() {
+              this.audio = this.$refs.audio;
+              this.audio.addEventListener('timeupdate', () => { this.currentTime = this.audio.currentTime; });
+              this.audio.addEventListener('loadedmetadata', () => { this.duration = this.audio.duration; });
+              this.audio.addEventListener('ended', () => { this.playing = false; this.currentTime = 0; });
+            },
+            togglePlay() {
+              if (this.playing) {
+                this.audio.pause();
+              } else {
+                // Pause all other audio elements on the page first
+                document.querySelectorAll('audio').forEach(el => {
+                  if (el !== this.audio) {
+                    el.pause();
+                    // trigger ended or update state if possible
+                    el.dispatchEvent(new Event('ended'));
+                  }
+                });
+                this.audio.play().catch(err => console.error('Audio playback failed:', err));
+              }
+              this.playing = !this.playing;
+            },
+            seek(e) {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              const width = rect.width;
+              const percentage = clickX / width;
+              this.audio.currentTime = percentage * this.duration;
+            }
+          }` : `{}`}
+          x-show={`activeFilter === 'All' || activeFilter === '${item.category}'`}
+          x-transition:enter="transition ease-out duration-300"
+          x-transition:enter-start="opacity-0 scale-95"
+          x-transition:enter-end="opacity-100 scale-100"
+          @ended.window="if (item.type === 'audio' && $event.target !== $refs.audio) playing = false"
+          class="group rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-sm overflow-hidden hover:border-brand-purple/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-brand-purple/10 flex flex-col justify-between"
+          aria-label={`${item.title} – ${item.category}`}
+        >
+          <!-- Image / Video / Audio Trigger area -->
+          <div class="relative h-48 overflow-hidden bg-slate-900 flex-shrink-0">
+            {item.type === 'audio' && item.audioSrc && (
+              <audio x-ref="audio" src={item.audioSrc} preload="metadata"></audio>
+            )}
+
+            {item.type === 'video' && item.videoSrc ? (
+              <div x-data="{ showVideo: false }" class="w-full h-full">
+                <template x-if="!showVideo">
+                  <div class="relative w-full h-full">
+                    <img
+                      src={item.image}
+                      alt={`${item.title} thumbnail`}
+                      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading={i < 3 ? 'eager' : 'lazy'}
+                      decoding="async"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                    <button
+                      @click="showVideo = true"
+                      class="absolute inset-0 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple rounded cursor-pointer"
+                      aria-label={`Play video: ${item.title}`}
+                    >
+                      <div class="w-14 h-14 rounded-full bg-brand-purple/80 backdrop-blur-sm flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M8 5v14l11-7z"/>
+                        </svg>
+                      </div>
+                    </button>
+                  </div>
+                </template>
+                <template x-if="showVideo">
+                  <div class="relative w-full h-full bg-black">
+                    <video controls autoplay class="w-full h-full object-contain">
+                      <source src={item.videoSrc} />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                </template>
+              </div>
+            ) : item.type === 'audio' && item.audioSrc ? (
+              <div class="relative w-full h-full">
+                <img
+                  src={item.image}
+                  alt={`${item.title} cover`}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading={i < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                
+                <!-- Audio Play Button Overlay -->
+                <button
+                  @click="togglePlay()"
+                  class="absolute inset-0 w-full h-full flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 focus:outline-none cursor-pointer"
+                  aria-label="Play sample"
+                >
+                  <div class="w-14 h-14 rounded-full bg-brand-cyan/90 flex items-center justify-center shadow-xl transform transition hover:scale-105">
+                    <template x-if="!playing">
+                      <svg class="w-6 h-6 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </template>
+                    <template x-if="playing">
+                      <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </template>
+                  </div>
+                </button>
+                
+                <!-- Tiny visualizer bars on image corner when playing -->
+                <div x-show="playing" class="absolute bottom-3 right-3 flex items-end gap-0.5 h-6 bg-black/50 px-2 py-1.5 rounded-md backdrop-blur-sm transition-all duration-300">
+                  <div class="w-0.5 bg-brand-cyan rounded-full visualizer-bar-1 h-1.5"></div>
+                  <div class="w-0.5 bg-brand-cyan rounded-full visualizer-bar-2 h-1.5"></div>
+                  <div class="w-0.5 bg-brand-cyan rounded-full visualizer-bar-3 h-1.5"></div>
+                </div>
+              </div>
+            ) : (
+              <div class="relative w-full h-full">
+                <img
+                  src={item.image}
+                  alt={`${item.title} cover`}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                  loading={i < 3 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+              </div>
+            )}
+
+            <!-- Category badge bottom -->
+            <div class="absolute bottom-3 left-3 px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm">
+              <span class="font-mono text-[9px] text-white/70 tracking-wider uppercase">{item.category}</span>
+            </div>
+          </div>
+
+          <!-- Content & Local Controls -->
+          <div class="p-5 flex-grow flex flex-col justify-between">
+            <div>
+              <div class="flex items-start justify-between gap-2 mb-2">
+                <h3 class="font-display text-base font-semibold text-white group-hover:text-brand-purple-light transition-colors duration-200 leading-snug">
+                  {item.title}
+                </h3>
+                {item.year && (
+                  <span class="font-mono text-[10px] text-white/25 shrink-0 mt-0.5">{item.year}</span>
+                )}
+              </div>
+              <p class="font-body text-sm text-white/45 leading-relaxed line-clamp-2">
+                {item.description}
+              </p>
+            </div>
+
+            <!-- Audio Player Controls Inside Card -->
+            {item.type === 'audio' && item.audioSrc && (
+              <div class="mt-4 pt-3 border-t border-white/5 space-y-2">
+                <div class="flex items-center gap-3">
+                  <!-- Play/Pause small button -->
+                  <button 
+                    @click="togglePlay()" 
+                    class="w-8 h-8 rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan flex items-center justify-center shadow focus:outline-none cursor-pointer transform hover:scale-105 active:scale-95"
+                    :aria-label="playing ? 'Pause' : 'Play'"
+                  >
+                    <template x-if="!playing">
+                      <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </template>
+                    <template x-if="playing">
+                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+                    </template>
+                  </button>
+
+                  <!-- Time scrubbing bar -->
+                  <div class="flex-grow">
+                    <div 
+                      @click="seek($event)"
+                      class="relative h-1.5 bg-slate-800 rounded-full cursor-pointer hover:h-2 transition-all duration-150 overflow-hidden"
+                    >
+                      <div 
+                        class="absolute top-0 left-0 h-full bg-gradient-to-r from-brand-purple to-brand-cyan rounded-full"
+                        :style="'width: ' + (duration ? (currentTime / duration) * 100 : 0) + '%'"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Timestamps -->
+                <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                  <span x-text="formatTime(currentTime)">0:00</span>
+                  <span x-text="formatTime(duration)">0:00</span>
+                </div>
+              </div>
+            )}
+            
+            <div class="mt-4 flex items-center gap-1.5">
+              <span class="w-1 h-1 rounded-full bg-brand-purple/60" aria-hidden="true"></span>
+              <span class="font-mono text-[10px] text-white/35 tracking-wide">{item.client}</span>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <!-- CTA -->
+    <div class="text-center mt-14">
+      <p class="font-body text-white/35 mb-4">Ready to add your project to this roster?</p>
+      <a
+        href="#contact"
+        class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-purple text-white font-semibold hover:bg-brand-purple-dark transition-all duration-200 shadow-xl shadow-brand-purple/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker cursor-pointer"
+      >
+        Start a Project
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes bounce-bar-1 { 0%, 100% { height: 6px; } 50% { height: 20px; } }
+  @keyframes bounce-bar-2 { 0%, 100% { height: 6px; } 50% { height: 14px; } }
+  @keyframes bounce-bar-3 { 0%, 100% { height: 6px; } 50% { height: 24px; } }
+
+  .visualizer-bar-1 { animation: bounce-bar-1 1s ease-in-out infinite; }
+  .visualizer-bar-2 { animation: bounce-bar-2 1.2s ease-in-out infinite 0.2s; }
+  .visualizer-bar-3 { animation: bounce-bar-3 0.8s ease-in-out infinite 0.1s; }
+</style>
