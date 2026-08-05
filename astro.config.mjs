@@ -8,7 +8,9 @@ import emdash from 'emdash/astro';
 import { d1, r2 } from '@emdash-cms/cloudflare';
 
 export default defineConfig({
-  adapter: cloudflare(),
+  adapter: cloudflare({
+    imageService: 'passthrough'
+  }),
   output: 'server',
   integrations: [
     alpinejs(),
