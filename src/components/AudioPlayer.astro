@@ -1,0 +1,147 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  excerpt?: string;
+  publishDate?: Date | null;
+}
+
+const { src, title, excerpt, publishDate } = Astro.props;
+
+const formattedDate = publishDate 
+  ? new Date(publishDate).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric'
+    })
+  : '';
+---
+
+<div 
+  x-data="{
+    playing: false,
+    duration: 0,
+    currentTime: 0,
+    audio: null,
+    formatTime(secs) {
+      if (isNaN(secs) || secs === Infinity) return '0:00';
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m}:${s < 10 ? '0' : ''}${s}`;
+    },
+    init() {
+      this.audio = this.$refs.audio;
+      
+      this.audio.addEventListener('timeupdate', () => {
+        this.currentTime = this.audio.currentTime;
+      });
+      
+      this.audio.addEventListener('loadedmetadata', () => {
+        this.duration = this.audio.duration;
+      });
+      
+      this.audio.addEventListener('ended', () => {
+        this.playing = false;
+        this.currentTime = 0;
+      });
+    },
+    togglePlay() {
+      if (this.playing) {
+        this.audio.pause();
+      } else {
+        this.audio.play().catch(err => console.error('Audio playback failed:', err));
+      }
+      this.playing = !this.playing;
+    },
+    seek(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const width = rect.width;
+      const percentage = clickX / width;
+      this.audio.currentTime = percentage * this.duration;
+    }
+  }" 
+  class="relative bg-brand-dark/95 border border-slate-800/80 rounded-2xl p-6 shadow-xl transition-all duration-300 hover:shadow-2xl hover:shadow-brand-purple/10 hover:border-brand-purple/30 group max-w-2xl w-full mx-auto"
+>
+  <audio x-ref="audio" src={src} preload="metadata"></audio>
+
+  <div class="flex flex-col sm:flex-row items-center gap-6">
+    <!-- Play/Pause Button -->
+    <button 
+      @click="togglePlay()" 
+      class="flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-r from-brand-purple to-brand-cyan hover:from-brand-purple-light hover:to-brand-cyan flex items-center justify-center shadow-lg cursor-pointer transform transition duration-300 hover:scale-105 active:scale-95 focus:outline-none"
+      aria-label="Play audio"
+    >
+      <!-- Play Icon -->
+      <template x-if="!playing">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white translate-x-0.5">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </template>
+      <!-- Pause Icon -->
+      <template x-if="playing">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-white">
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+        </svg>
+      </template>
+    </button>
+
+    <!-- Details and Progress -->
+    <div class="flex-grow w-full">
+      <div class="flex justify-between items-start gap-4 mb-2">
+        <div>
+          {formattedDate && (
+            <span class="text-xs font-semibold tracking-wider uppercase text-brand-cyan">{formattedDate}</span>
+          )}
+          <h3 class="text-lg font-bold text-white group-hover:text-brand-purple-light transition duration-300">{title}</h3>
+        </div>
+        
+        <!-- Animated Music Visualizer -->
+        <div class="flex items-end gap-1 h-8 flex-shrink-0" aria-hidden="true">
+          <div class="w-1 bg-gradient-to-t from-brand-purple to-brand-cyan rounded-full transition-all duration-300" :class="playing ? 'visualizer-bar-1' : 'h-1.5'"></div>
+          <div class="w-1 bg-gradient-to-t from-brand-purple to-brand-cyan rounded-full transition-all duration-300" :class="playing ? 'visualizer-bar-2' : 'h-1.5'"></div>
+          <div class="w-1 bg-gradient-to-t from-brand-purple to-brand-cyan rounded-full transition-all duration-300" :class="playing ? 'visualizer-bar-3' : 'h-1.5'"></div>
+          <div class="w-1 bg-gradient-to-t from-brand-purple to-brand-cyan rounded-full transition-all duration-300" :class="playing ? 'visualizer-bar-4' : 'h-1.5'"></div>
+          <div class="w-1 bg-gradient-to-t from-brand-purple to-brand-cyan rounded-full transition-all duration-300" :class="playing ? 'visualizer-bar-5' : 'h-1.5'"></div>
+        </div>
+      </div>
+
+      {excerpt && (
+        <p class="text-sm text-slate-400 mb-4 line-clamp-2">{excerpt}</p>
+      )}
+
+      <!-- Progress Scrub Bar -->
+      <div class="space-y-1.5">
+        <div 
+          @click="seek($event)"
+          class="relative h-2 bg-slate-800 rounded-full cursor-pointer hover:h-2.5 transition-all duration-150 overflow-hidden"
+        >
+          <div 
+            class="absolute top-0 left-0 h-full bg-gradient-to-r from-brand-purple to-brand-cyan rounded-full"
+            :style="`width: ${duration ? (currentTime / duration) * 100 : 0}%`"
+          ></div>
+        </div>
+        
+        <!-- Time Stamps -->
+        <div class="flex justify-between text-xs font-mono text-slate-500">
+          <span x-text="formatTime(currentTime)">0:00</span>
+          <span x-text="formatTime(duration)">0:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes bounce-bar-1 { 0%, 100% { height: 6px; } 50% { height: 26px; } }
+  @keyframes bounce-bar-2 { 0%, 100% { height: 6px; } 50% { height: 18px; } }
+  @keyframes bounce-bar-3 { 0%, 100% { height: 6px; } 50% { height: 30px; } }
+  @keyframes bounce-bar-4 { 0%, 100% { height: 6px; } 50% { height: 22px; } }
+  @keyframes bounce-bar-5 { 0%, 100% { height: 6px; } 50% { height: 16px; } }
+
+  .visualizer-bar-1 { animation: bounce-bar-1 1s ease-in-out infinite; }
+  .visualizer-bar-2 { animation: bounce-bar-2 1.2s ease-in-out infinite 0.2s; }
+  .visualizer-bar-3 { animation: bounce-bar-3 0.8s ease-in-out infinite 0.1s; }
+  .visualizer-bar-4 { animation: bounce-bar-4 1.1s ease-in-out infinite 0.3s; }
+  .visualizer-bar-5 { animation: bounce-bar-5 0.9s ease-in-out infinite 0.15s; }
+</style>

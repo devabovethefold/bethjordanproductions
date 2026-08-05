@@ -1,0 +1,29 @@
+{
+  "name": "bethjordanproductions",
+  "compatibility_date": "2026-08-05",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "nodejs_compat_populate_process_env"
+  ],
+  "vars": {
+    "EMDASH_SITE_URL": "http://localhost:4321"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bethjordanproductions-db",
+      "database_id": "a27cceda-122a-40a0-98d9-5b6bec644e5c"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "MEDIA",
+      "bucket_name": "bethjordanproductions-media"
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  }
+}
