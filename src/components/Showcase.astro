@@ -172,7 +172,7 @@ const categories = [
               this.audio.currentTime = percentage * this.duration;
             }
           }` : `{}`}
-          x-show={`activeFilter === 'All' ? (showAll || ${item.featured || i < 8 ? 'true' : 'false'}) : activeFilter === '${item.category}'`}
+          x-show={`activeFilter === 'All' ? (showAll || ${item.featured ? 'true' : 'false'}) : activeFilter === '${item.category}'`}
           x-transition:enter="transition ease-out duration-300"
           x-transition:enter-start="opacity-0 scale-95"
           x-transition:enter-end="opacity-100 scale-100"
@@ -350,7 +350,7 @@ const categories = [
 
     <!-- CTA -->
     <div class="text-center mt-14">
-      <p class="font-body text-white/35 mb-4">Ready to add your project to this roster?</p>
+      <p class="font-body text-white/35 mb-4">Need a custom voiceover or audio production for your brand?</p>
       <a
         href="#contact"
         class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-purple text-white font-semibold hover:bg-brand-purple-dark transition-all duration-200 shadow-xl shadow-brand-purple/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker cursor-pointer"
