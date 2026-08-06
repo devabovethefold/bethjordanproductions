@@ -5,9 +5,8 @@
     "nodejs_compat",
     "nodejs_compat_populate_process_env"
   ],
-  "pages_build_output_dir": "./dist",
   "vars": {
-    "EMDASH_SITE_URL": "https://bethjordanproductions.pages.dev"
+    "EMDASH_SITE_URL": "https://bethjordanproductions.tight-waterfall-9d9b.workers.dev"
   },
   "kv_namespaces": [
     {
