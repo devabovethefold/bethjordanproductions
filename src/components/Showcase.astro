@@ -41,7 +41,7 @@ const allItems = posts.map((post) => {
   const isAudio = media?.mimeType?.startsWith('audio/') || media?.filename?.endsWith('.mp3');
   
   const terms = categoriesByEntry.get(post.id) ?? [];
-  const category = terms[0]?.name || (isVideo ? 'Music Mixes' : 'Voiceovers');
+  const category = terms[0]?.label || terms[0]?.name || (isVideo ? 'Music Mixes' : 'Voiceovers');
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
