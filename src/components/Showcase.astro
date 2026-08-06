@@ -53,7 +53,7 @@ const allItems = posts.map((post) => {
   // EmDash serves local media files at /_emdash/api/media/file/<storageKey> (public route, no auth).
   // media?.src is only populated for external providers; for local/R2 storage we build the URL from storageKey.
   const storageKey = media?.meta?.storageKey ?? media?.id;
-  const mediaSrc = media?.src || (storageKey ? `/_emdash/api/media/file/${storageKey}` : undefined);
+  const mediaSrc = media?.src || (storageKey ? `/_emdash/api/media/file/${storageKey}?v=3` : undefined);
 
   return {
     title: post.data.title,
