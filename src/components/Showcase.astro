@@ -8,7 +8,7 @@ interface Post {
     title: string;
     excerpt?: string;
     featured_image?: { src?: string };
-    media_file?: { src?: string; filename?: string; mimeType?: string; size?: number };
+    media_file?: { id?: string; src?: string; filename?: string; mimeType?: string; size?: number; meta?: { storageKey?: string } };
   };
   publishedAt: Date | null;
 }
@@ -45,9 +45,10 @@ const allItems = posts.map((post) => {
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
-  // EmDash serves local media files at /_emdash/media/<id>.
-  // media?.src is only populated for external providers; for local storage we build the URL from the id.
-  const mediaSrc = media?.src || (media?.id ? `/_emdash/media/${media.id}` : undefined);
+  // EmDash serves local media files at /_emdash/api/media/file/<storageKey> (public route, no auth).
+  // media?.src is only populated for external providers; for local/R2 storage we build the URL from storageKey.
+  const storageKey = media?.meta?.storageKey ?? media?.id;
+  const mediaSrc = media?.src || (storageKey ? `/_emdash/api/media/file/${storageKey}` : undefined);
 
   return {
     title: post.data.title,
