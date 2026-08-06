@@ -25,13 +25,19 @@ const categoriesByEntry = entryIds.length > 0
   ? await getTermsForEntries('posts', entryIds, 'category')
   : new Map();
 
+const labelMap: Record<string, string> = {
+  'IVR/On-Hold Messaging': 'IVR & On-Hold',
+  'Brand Imaging/Sound Design': 'Brand Imaging & Sound',
+  'Commercial Ad Production': 'Commercial Ads',
+};
+
 // Category image fallbacks
 const categoryImages: Record<string, string> = {
   'Voiceovers': 'https://images.pexels.com/photos/3783471/pexels-photo-3783471.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'IVR/On-Hold Messaging': 'https://images.pexels.com/photos/8293693/pexels-photo-8293693.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'IVR & On-Hold': 'https://images.pexels.com/photos/8293693/pexels-photo-8293693.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Audiobooks': 'https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'Brand Imaging/Sound Design': 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'Commercial Ad Production': 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Brand Imaging & Sound': 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Commercial Ads': 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Podcast Editing': 'https://images.pexels.com/photos/3784221/pexels-photo-3784221.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Music Mixes': 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=600'
 };
@@ -46,7 +52,8 @@ const allItems = posts.map((post) => {
     || categoriesByEntry.get(post.id) 
     || categoriesByEntry.get((post.data as any)?.id) 
     || [];
-  const category = terms[0]?.label || (isVideo ? 'Music Mixes' : 'Voiceovers');
+  const rawCategory = terms[0]?.label || (isVideo ? 'Music Mixes' : 'Voiceovers');
+  const category = labelMap[rawCategory] || rawCategory;
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
@@ -74,10 +81,10 @@ const allItems = posts.map((post) => {
 const categories = [
   'All', 
   'Voiceovers', 
-  'IVR/On-Hold Messaging', 
+  'IVR & On-Hold', 
   'Audiobooks', 
-  'Brand Imaging/Sound Design', 
-  'Commercial Ad Production', 
+  'Brand Imaging & Sound', 
+  'Commercial Ads', 
   'Podcast Editing', 
   'Music Mixes'
 ];
@@ -109,12 +116,12 @@ const categories = [
     </div>
 
     <!-- Filter tabs -->
-    <div class="flex flex-wrap justify-center gap-1 mb-12" role="tablist" aria-label="Filter portfolio by category">
+    <div class="flex flex-nowrap overflow-x-auto lg:overflow-x-visible justify-start lg:justify-center gap-1.5 mb-12 pb-2 lg:pb-0 scrollbar-none" role="tablist" aria-label="Filter portfolio by category">
       {categories.map((cat) => (
         <button
           @click={`activeFilter = '${cat}'`}
           :class={`activeFilter === '${cat}' ? 'bg-brand-purple text-white border-brand-purple shadow-lg shadow-brand-purple/25' : 'bg-white/[0.04] text-white/55 border-white/10 hover:bg-white/8 hover:text-white'`}
-          class="px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple cursor-pointer"
+          class="px-3 py-1.5 rounded-full text-xs font-medium border shrink-0 whitespace-nowrap transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple cursor-pointer"
           role="tab"
           :aria-selected={`activeFilter === '${cat}'`}
         >
@@ -355,7 +362,7 @@ const categories = [
         href="#contact"
         class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-brand-purple text-white font-semibold hover:bg-brand-purple-dark transition-all duration-200 shadow-xl shadow-brand-purple/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-darker cursor-pointer"
       >
-        Start a Project
+        Request a Quote
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
         </svg>
