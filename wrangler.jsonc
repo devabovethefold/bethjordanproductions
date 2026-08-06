@@ -1,12 +1,13 @@
 {
   "name": "bethjordanproductions",
+  "account_id": "0dc131bd34caae6fc6863ebf8051d024",
   "compatibility_date": "2026-08-05",
   "compatibility_flags": [
     "nodejs_compat",
     "nodejs_compat_populate_process_env"
   ],
   "vars": {
-    "EMDASH_SITE_URL": "https://bethjordanproductions.tight-waterfall-9d9b.workers.dev"
+    "EMDASH_SITE_URL": "https://www.bethjordanproductions.com"
   },
   "kv_namespaces": [
     {
@@ -27,9 +28,9 @@
       "bucket_name": "bethjordanproductions-media"
     }
   ],
-  "triggers": {
-    "crons": [
-      "* * * * *"
-    ]
-  }
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ]
 }

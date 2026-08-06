@@ -32,14 +32,37 @@
         email: '',
         service: '',
         message: '',
+        _hp: '',
         submitted: false,
         submitting: false,
+        errorMessage: '',
         async submit() {
           if (!this.name || !this.email || !this.message) return;
           this.submitting = true;
-          await new Promise(r => setTimeout(r, 900));
-          this.submitting = false;
-          this.submitted = true;
+          this.errorMessage = '';
+          try {
+            const res = await fetch('/api/contact', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                name: this.name,
+                email: this.email,
+                service: this.service,
+                message: this.message,
+                _hp: this._hp
+              })
+            });
+            const data = await res.json();
+            if (data.success) {
+              this.submitted = true;
+            } else {
+              this.errorMessage = data.error || 'Something went wrong. Please try again.';
+            }
+          } catch (e) {
+            this.errorMessage = 'Network error. Please try again.';
+          } finally {
+            this.submitting = false;
+          }
         }
       }"
     >
@@ -64,6 +87,14 @@
         novalidate
         aria-label="Contact form"
       >
+        <!-- Honeypot -->
+        <input type="text" name="_hp" x-model="_hp" class="hidden" tabindex="-1" autocomplete="off" />
+
+        <!-- Error Alert -->
+        <div x-show="errorMessage" class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 font-body text-sm">
+          <span x-text="errorMessage"></span>
+        </div>
+
         <div class="grid sm:grid-cols-2 gap-6">
           <div>
             <label for="contact-name" class="block font-body text-sm text-white/65 mb-2">
@@ -156,7 +187,7 @@
     <!-- Alt contact methods -->
     <div class="mt-10 grid sm:grid-cols-3 gap-4 text-center">
       {[
-        { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`, label: 'Email', value: 'info@bethjordanproductions.com' },
+        { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`, label: 'Email', value: 'hello@bethjordanproductions.com' },
         { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>`, label: 'Phone', value: '(555) 000-0000' },
         { icon: `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>`, label: 'Location', value: 'United States' },
       ].map((item) => (
