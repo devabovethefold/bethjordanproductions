@@ -5,8 +5,9 @@
     "nodejs_compat",
     "nodejs_compat_populate_process_env"
   ],
+  "pages_build_output_dir": "./dist",
   "vars": {
-    "EMDASH_SITE_URL": "http://localhost:4321"
+    "EMDASH_SITE_URL": "https://bethjordanproductions.pages.dev"
   },
   "kv_namespaces": [
     {

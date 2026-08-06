@@ -45,6 +45,10 @@ const allItems = posts.map((post) => {
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
+  // EmDash serves local media files at /_emdash/media/<id>.
+  // media?.src is only populated for external providers; for local storage we build the URL from the id.
+  const mediaSrc = media?.src || (media?.id ? `/_emdash/media/${media.id}` : undefined);
+
   return {
     title: post.data.title,
     category: category,
@@ -55,8 +59,8 @@ const allItems = posts.map((post) => {
       ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric' })
       : '',
     type: isVideo ? 'video' : isAudio ? 'audio' : 'article',
-    audioSrc: isAudio ? media?.src : undefined,
-    videoSrc: isVideo ? media?.src : undefined,
+    audioSrc: isAudio ? mediaSrc : undefined,
+    videoSrc: isVideo ? mediaSrc : undefined,
   };
 });
 
