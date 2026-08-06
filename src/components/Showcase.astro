@@ -64,6 +64,7 @@ const allItems = posts.map((post) => {
     year: post.publishedAt
       ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric' })
       : '',
+    featured: Boolean(post.data.featured),
     type: isVideo ? 'video' : isAudio ? 'audio' : 'article',
     audioSrc: isAudio ? mediaSrc : undefined,
     videoSrc: isVideo ? mediaSrc : undefined,
@@ -91,7 +92,7 @@ const categories = [
 
   <div
     class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-    x-data="{ activeFilter: 'All' }"
+    x-data="{ activeFilter: 'All', showAll: false }"
   >
     <!-- Section header -->
     <div class="text-center mb-16">
@@ -171,7 +172,7 @@ const categories = [
               this.audio.currentTime = percentage * this.duration;
             }
           }` : `{}`}
-          x-show={`activeFilter === 'All' || activeFilter === '${item.category}'`}
+          x-show={`activeFilter === 'All' ? (showAll || ${item.featured || i < 8 ? 'true' : 'false'}) : activeFilter === '${item.category}'`}
           x-transition:enter="transition ease-out duration-300"
           x-transition:enter-start="opacity-0 scale-95"
           x-transition:enter-end="opacity-100 scale-100"
@@ -335,6 +336,16 @@ const categories = [
           </div>
         </article>
       ))}
+    </div>
+
+    <!-- View All Toggle Button -->
+    <div x-show="activeFilter === 'All'" class="text-center mt-10 mb-4">
+      <button
+        @click="showAll = !showAll"
+        class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/[0.06] hover:bg-white/10 text-white/80 hover:text-white border border-white/10 transition-all duration-200 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-purple cursor-pointer"
+      >
+        <span x-text="showAll ? 'Show Featured Samples Only ↑' : 'View All Portfolio Samples ↓'">View All Portfolio Samples ↓</span>
+      </button>
     </div>
 
     <!-- CTA -->
