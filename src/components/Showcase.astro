@@ -20,8 +20,9 @@ interface Props {
 const { posts = [] } = Astro.props;
 
 // Fetch category terms for all posts
-const categoriesByEntry = posts.length > 0
-  ? await getTermsForEntries('posts', posts.map(p => p.id), 'category')
+const entryIds = posts.flatMap(p => [p.id, (p.data as any)?.id].filter(Boolean));
+const categoriesByEntry = entryIds.length > 0
+  ? await getTermsForEntries('posts', entryIds, 'category')
   : new Map();
 
 // Category image fallbacks
@@ -40,8 +41,12 @@ const allItems = posts.map((post) => {
   const isVideo = media?.mimeType?.startsWith('video/') || media?.filename?.endsWith('.mov') || media?.filename?.endsWith('.mp4');
   const isAudio = media?.mimeType?.startsWith('audio/') || media?.filename?.endsWith('.mp3');
   
-  const terms = categoriesByEntry.get(post.id) ?? [];
-  const category = terms[0]?.label || terms[0]?.name || (isVideo ? 'Music Mixes' : 'Voiceovers');
+  const terms = (post as any).terms?.category 
+    || (post.data as any)?.terms?.category 
+    || categoriesByEntry.get(post.id) 
+    || categoriesByEntry.get((post.data as any)?.id) 
+    || [];
+  const category = terms[0]?.label || (isVideo ? 'Music Mixes' : 'Voiceovers');
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
