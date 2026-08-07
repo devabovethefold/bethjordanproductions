@@ -22,19 +22,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Dynamically resolution of Cloudflare Worker bindings
-    let db: any = null;
-    let emailBinding: any = null;
-
-    try {
-      const cfEnv = (globalThis as any).__env__ || (process as any).env;
-      db = cfEnv?.DB;
-      emailBinding = cfEnv?.EMAIL;
-    } catch {}
-
-    if (!db && (locals as any)?.DB) {
-      db = (locals as any).DB;
-    }
+    // Resolution of Cloudflare Worker bindings in Astro SSR
+    const cfEnv = (locals as any)?.runtime?.env || (globalThis as any).__env__ || (process as any).env;
+    const db = cfEnv?.DB || (locals as any)?.DB;
+    const emailBinding = cfEnv?.EMAIL || (locals as any)?.EMAIL;
 
     const timestamp = new Date().toISOString();
     const submissionId = 'sub_' + Math.random().toString(36).substring(2, 11);
@@ -62,8 +53,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     }
 
-    // Send email notification via Cloudflare Email Routing if available
-    const notificationRecipients = ['hello@bethjordanproductions.com', 'jasonperkins77@gmail.com'];
+    // Send email notification via Cloudflare Email Routing directly to hello@bethjordanproductions.com
+    const notificationRecipients = ['hello@bethjordanproductions.com'];
     
     if (emailBinding && typeof emailBinding.send === 'function') {
       const emailText = `New Contact Form Submission:
