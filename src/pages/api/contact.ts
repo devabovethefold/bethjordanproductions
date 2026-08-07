@@ -91,10 +91,10 @@ export const POST: APIRoute = async ({ request }) => {
 
     const emailText = `📬 New contact form inquiry from Beth Jordan Productions 
 
-<strong>Name:</strong> ${name}<br>
-<strong>Email:</strong> ${email}<br>
-<strong>Service:</strong> ${service || "General Inquiry"}<br>
-<strong>Date:</strong> ${formattedDate} EST<br><br>
+Name: ${name}
+Email: ${email}
+Service: ${service || "General Inquiry"}
+Date: ${formattedDate} EST
 
 ${message}
 `;
