@@ -1,0 +1,14 @@
+{
+  "name": "email-proxy",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-05",
+  "vars": {
+    "SECRET_TOKEN": "bjp_secret_email_proxy_2026_key"
+  },
+  "send_email": [
+    {
+      "name": "EMAIL",
+      "destination_address": "hello@bethjordanproductions.com"
+    }
+  ]
+}

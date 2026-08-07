@@ -7,7 +7,9 @@
     "nodejs_compat_populate_process_env"
   ],
   "vars": {
-    "EMDASH_SITE_URL": "https://www.bethjordanproductions.com"
+    "EMDASH_SITE_URL": "https://www.bethjordanproductions.com",
+    "EMAIL_PROXY_URL": "https://email-proxy.bethjordanproductions.workers.dev",
+    "EMAIL_PROXY_SECRET": "bjp_secret_email_proxy_2026_key"
   },
   "kv_namespaces": [
     {

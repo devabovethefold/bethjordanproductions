@@ -54,11 +54,9 @@ export const POST: APIRoute = async ({ request }) => {
       }
     }
 
-    // Send email notification via Cloudflare Email Routing directly to hello@bethjordanproductions.com
-    const notificationRecipients = ['hello@bethjordanproductions.com'];
-    
-    if (emailBinding && typeof emailBinding.send === 'function') {
-      const emailText = `New Contact Form Submission:
+    // Send email notification via Cloudflare Email Proxy Webhook or Direct Email Binding
+    const notificationRecipients = ['hiya@bethjordanproductions.com', 'hello@bethjordanproductions.com'];
+    const emailText = `New Contact Form Submission:
 
 Name: ${name}
 Email: ${email}
@@ -69,20 +67,54 @@ Message:
 ${message}
 `;
 
+    const emailProxyUrl = cfEnv.EMAIL_PROXY_URL || 'https://email-proxy.bethjordanproductions.workers.dev';
+    const emailProxySecret = cfEnv.EMAIL_PROXY_SECRET || 'bjp_secret_email_proxy_2026_key';
+
+    let emailSent = false;
+
+    // 1. Try sending via Cloudflare Email Proxy Webhook (Cross-Account solution)
+    if (emailProxyUrl) {
+      try {
+        const proxyResp = await fetch(emailProxyUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${emailProxySecret}`,
+          },
+          body: JSON.stringify({
+            from: 'hiya@bethjordanproductions.com',
+            to: notificationRecipients,
+            subject: `New Contact Inquiry from ${name}`,
+            text: emailText,
+          }),
+        });
+
+        if (proxyResp.ok) {
+          console.log('Successfully dispatched email via Cloudflare Email Proxy Webhook');
+          emailSent = true;
+        } else {
+          console.error('Email proxy responded with error status:', proxyResp.status, await proxyResp.text());
+        }
+      } catch (proxyErr) {
+        console.error('Failed calling email proxy webhook:', proxyErr);
+      }
+    }
+
+    // 2. Fallback to direct email binding if available and proxy didn't succeed
+    if (!emailSent && emailBinding && typeof emailBinding.send === 'function') {
       for (const toRecipient of notificationRecipients) {
         try {
           await emailBinding.send({
-            from: 'hello@bethjordanproductions.com',
+            from: 'hiya@bethjordanproductions.com',
             to: toRecipient,
             subject: `New Contact Inquiry from ${name}`,
             text: emailText,
           });
+          console.log(`Successfully sent email notification directly to ${toRecipient}`);
         } catch (emailErr) {
-          console.error(`Failed sending email to ${toRecipient}:`, emailErr);
+          console.error(`Failed sending direct email to ${toRecipient}:`, emailErr);
         }
       }
-    } else {
-      console.log(`[CONTACT FORM SUBMISSION] From: ${name} <${email}> | Service: ${service} | Message: ${message}`);
     }
 
     return new Response(JSON.stringify({ success: true, message: 'Message Received!' }), {
