@@ -8,7 +8,7 @@
   ],
   "vars": {
     "EMDASH_SITE_URL": "https://www.bethjordanproductions.com",
-    "EMAIL_PROXY_URL": "https://email-proxy.bethjordanproductions.workers.dev",
+    "EMAIL_PROXY_URL": "https://email-proxy.beth-jordan.workers.dev",
     "EMAIL_PROXY_SECRET": "bjp_secret_email_proxy_2026_key"
   },
   "kv_namespaces": [

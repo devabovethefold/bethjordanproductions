@@ -56,18 +56,33 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Send email notification via Cloudflare Email Proxy Webhook or Direct Email Binding
     const notificationRecipients = ['jasonperkins77@gmail.com'];
-    const emailText = `New Contact Form Submission:
 
-Name: ${name}
-Email: ${email}
-Service Needed: ${service || 'Not specified'}
-Submitted At: ${timestamp}
+    const formattedDate = new Date().toLocaleString('en-US', {
+      timeZone: 'America/New_York',
+      dateStyle: 'full',
+      timeStyle: 'short',
+    });
 
-Message:
+    const emailText = `📬 NEW CONTACT FORM INQUIRY
+
+--------------------------------------------------
+CLIENT DETAILS
+--------------------------------------------------
+Name:     ${name}
+Email:    ${email}
+Service:  ${service || 'General Inquiry'}
+Date:     ${formattedDate} EST
+
+--------------------------------------------------
+MESSAGE
+--------------------------------------------------
 ${message}
+
+--------------------------------------------------
+Submitted via Beth Jordan Productions Website
 `;
 
-    const emailProxyUrl = cfEnv.EMAIL_PROXY_URL || 'https://email-proxy.bethjordanproductions.workers.dev';
+    const emailProxyUrl = cfEnv.EMAIL_PROXY_URL || 'https://email-proxy.beth-jordan.workers.dev';
     const emailProxySecret = cfEnv.EMAIL_PROXY_SECRET || 'bjp_secret_email_proxy_2026_key';
 
     let emailSent = false;
