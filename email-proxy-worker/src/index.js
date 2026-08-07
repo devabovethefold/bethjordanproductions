@@ -30,7 +30,7 @@ export default {
 
     try {
       const payload = await request.json();
-      const { from = 'hiya@bethjordanproductions.com', to, subject, text } = payload;
+      const { from = 'hello@bethjordanproductions.com', to, subject, text } = payload;
 
       if (!env.EMAIL || typeof env.EMAIL.send !== 'function') {
         return new Response(JSON.stringify({ error: 'EMAIL binding not configured on destination worker' }), {

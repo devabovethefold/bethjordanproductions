@@ -116,7 +116,7 @@ ${message}
             Authorization: `Bearer ${emailProxySecret}`,
           },
           body: JSON.stringify({
-            from: "hiya@bethjordanproductions.com",
+            from: "hello@bethjordanproductions.com",
             to: notificationRecipients,
             subject: `New Contact Inquiry from ${name}`,
             text: emailText,
@@ -145,7 +145,7 @@ ${message}
       for (const toRecipient of notificationRecipients) {
         try {
           await emailBinding.send({
-            from: "hiya@bethjordanproductions.com",
+            from: "hello@bethjordanproductions.com",
             to: toRecipient,
             subject: `New Contact Inquiry from ${name}`,
             text: emailText,
