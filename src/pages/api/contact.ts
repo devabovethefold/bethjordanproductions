@@ -1,8 +1,9 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 
 export const prerender = false;
 
-export const POST: APIRoute = async ({ request, locals }) => {
+export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json();
     const { name, email, service, message, _hp } = body;
@@ -22,10 +23,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
       });
     }
 
-    // Resolution of Cloudflare Worker bindings in Astro SSR
-    const cfEnv = (locals as any)?.runtime?.env || (globalThis as any).__env__ || (process as any).env;
-    const db = cfEnv?.DB || (locals as any)?.DB;
-    const emailBinding = cfEnv?.EMAIL || (locals as any)?.EMAIL;
+    // Resolution of Cloudflare Worker bindings in Astro
+    const cfEnv: any = env || (globalThis as any).__env__ || (process as any).env || {};
+    const db = cfEnv.DB;
+    const emailBinding = cfEnv.EMAIL;
 
     const timestamp = new Date().toISOString();
     const submissionId = 'sub_' + Math.random().toString(36).substring(2, 11);
