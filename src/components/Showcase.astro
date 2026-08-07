@@ -34,7 +34,7 @@ const labelMap: Record<string, string> = {
 // Category image fallbacks
 const categoryImages: Record<string, string> = {
   'Voiceovers': 'https://images.pexels.com/photos/3783471/pexels-photo-3783471.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'IVR & On-Hold': '/images/ivr_headset.png',
+  'IVR & On-Hold': '/_emdash/api/media/file/ivr_headset_stock.png?v=3',
   'Audiobooks': 'https://images.pexels.com/photos/3747468/pexels-photo-3747468.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Imaging & Sound Design': 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Commercial Ads': 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -55,7 +55,7 @@ const allItems = posts.map((post) => {
   const rawCategory = terms[0]?.label || (isVideo ? 'Music Mixes' : 'Voiceovers');
   const category = labelMap[rawCategory] || rawCategory;
   
-  const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
+  const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/8867434/pexels-photo-8867434.jpeg?auto=compress&cs=tinysrgb&w=600';
 
   // Robust featured_image URL extraction
   const rawFeatImg = post.data.featured_image;
