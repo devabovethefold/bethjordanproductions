@@ -57,6 +57,21 @@ const allItems = posts.map((post) => {
   
   const fallbackImage = categoryImages[category] || 'https://images.pexels.com/photos/7709678/pexels-photo-7709678.jpeg?auto=compress&cs=tinysrgb&w=600';
 
+  // Robust featured_image URL extraction
+  const rawFeatImg = post.data.featured_image;
+  let featImgUrl: string | undefined;
+  if (typeof rawFeatImg === 'string') {
+    if (rawFeatImg.startsWith('http') || rawFeatImg.startsWith('/')) {
+      featImgUrl = rawFeatImg;
+    }
+  } else if (rawFeatImg && typeof rawFeatImg === 'object') {
+    if (typeof rawFeatImg.src === 'string' && (rawFeatImg.src.startsWith('http') || rawFeatImg.src.startsWith('/'))) {
+      featImgUrl = rawFeatImg.src;
+    } else if (rawFeatImg.meta?.storageKey) {
+      featImgUrl = `/_emdash/api/media/file/${rawFeatImg.meta.storageKey}?v=3`;
+    }
+  }
+
   // EmDash serves local media files at /_emdash/api/media/file/<storageKey> (public route, no auth).
   // media?.src is only populated for external providers; for local/R2 storage we build the URL from storageKey.
   const storageKey = media?.meta?.storageKey ?? media?.id;
@@ -66,7 +81,8 @@ const allItems = posts.map((post) => {
     title: post.data.title,
     category: category,
     description: post.data.excerpt || '',
-    image: post.data.featured_image?.src || fallbackImage,
+    image: featImgUrl || fallbackImage,
+    fallbackImage: fallbackImage,
     client: 'Beth Jordan Productions',
     year: post.publishedAt
       ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric' })
@@ -203,6 +219,7 @@ const categories = [
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading={i < 3 ? 'eager' : 'lazy'}
                       decoding="async"
+                      onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                     />
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                     <button
@@ -235,6 +252,7 @@ const categories = [
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading={i < 3 ? 'eager' : 'lazy'}
                   decoding="async"
+                  onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                 
@@ -269,6 +287,7 @@ const categories = [
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading={i < 3 ? 'eager' : 'lazy'}
                   decoding="async"
+                  onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
               </div>
