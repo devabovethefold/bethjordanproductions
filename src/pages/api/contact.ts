@@ -55,7 +55,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Send email notification via Cloudflare Email Proxy Webhook or Direct Email Binding
-    const notificationRecipients = ['hiya@bethjordanproductions.com', 'hello@bethjordanproductions.com'];
+    const notificationRecipients = ['jasonperkins77@gmail.com'];
     const emailText = `New Contact Form Submission:
 
 Name: ${name}

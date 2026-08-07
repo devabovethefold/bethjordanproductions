@@ -39,7 +39,7 @@ export default {
         });
       }
 
-      const recipients = Array.isArray(to) ? to : [to || 'hello@bethjordanproductions.com'];
+      const recipients = Array.isArray(to) ? to : [to || 'jasonperkins77@gmail.com'];
 
       for (const recipient of recipients) {
         await env.EMAIL.send({
