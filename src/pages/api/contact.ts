@@ -81,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Send email notification via Cloudflare Email Proxy Webhook or Direct Email Binding
-    const notificationRecipients = ["contact@bethjordanproductions.com"];
+    const notificationRecipients = ["bethjordanproductions@gmail.com"];
 
     const formattedDate = new Date().toLocaleString("en-US", {
       timeZone: "America/New_York",
