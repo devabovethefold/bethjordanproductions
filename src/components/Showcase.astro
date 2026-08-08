@@ -207,7 +207,7 @@ const categories = [
           <!-- Image / Video / Audio Trigger area -->
           <div class="relative h-48 overflow-hidden bg-slate-900 flex-shrink-0">
             {item.type === 'audio' && item.audioSrc && (
-              <audio x-ref="audio" src={item.audioSrc} preload="metadata"></audio>
+              <audio x-ref="audio" src={item.audioSrc} preload="none"></audio>
             )}
 
             {item.type === 'video' && item.videoSrc ? (
