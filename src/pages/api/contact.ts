@@ -75,6 +75,35 @@ export const POST: APIRoute = async ({ request }) => {
             timestamp,
           )
           .run();
+
+        // Also save to EmDash Forms plugin storage for EmDash Admin dashboard integration
+        const pluginSubmissionData = JSON.stringify({
+          formId: "contact-form",
+          data: {
+            name,
+            email,
+            service: service || "General",
+            message,
+          },
+          files: [],
+          status: "unread",
+          starred: false,
+          notes: "",
+          submitterIp: request.headers.get("cf-connecting-ip") || "127.0.0.1",
+          userAgent: request.headers.get("user-agent") || "",
+          createdAt: timestamp,
+          updatedAt: timestamp,
+        });
+
+        await db
+          .prepare(
+            `
+          INSERT INTO _plugin_storage (plugin_id, collection, id, data, created_at, updated_at)
+          VALUES ('forms', 'submissions', ?, ?, ?, ?)
+        `,
+          )
+          .bind(submissionId, pluginSubmissionData, timestamp, timestamp)
+          .run();
       } catch (dbErr) {
         console.error("Error saving contact submission to D1:", dbErr);
       }
