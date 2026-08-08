@@ -50,6 +50,31 @@ const categoryImages: Record<string, string> = {
   'Ad Copywriting': 'https://images.pexels.com/photos/3059747/pexels-photo-3059747.jpeg?auto=compress&cs=tinysrgb&w=600',
 };
 
+function extractPlainText(content: any): string {
+  if (!content) return '';
+  if (typeof content === 'string') {
+    const trimmed = content.trim();
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+      try {
+        return extractPlainText(JSON.parse(trimmed));
+      } catch {
+        return content;
+      }
+    }
+    return content;
+  }
+  if (Array.isArray(content)) {
+    return content.map(extractPlainText).filter(Boolean).join('\n');
+  }
+  if (typeof content === 'object') {
+    if (content.text) return content.text;
+    if (content.content) return extractPlainText(content.content);
+    if (content.children) return extractPlainText(content.children);
+    if (content.value) return extractPlainText(content.value);
+  }
+  return '';
+}
+
 const allItems = posts.map((post) => {
   const media = post.data.media_file;
   const isVideo = media?.mimeType?.startsWith('video/') || media?.filename?.endsWith('.mov') || media?.filename?.endsWith('.mp4');
@@ -85,7 +110,8 @@ const allItems = posts.map((post) => {
   const storageKey = media?.meta?.storageKey ?? media?.id;
   const mediaSrc = media?.src || (storageKey ? `/_emdash/api/media/file/${storageKey}?v=3` : undefined);
 
-  const scriptText = (post as any).body || (post as any).content || (post.data as any).script || (post.data as any).content || (post.data as any).body || post.data.excerpt || '';
+  const rawScript = (post as any).body || (post as any).content || (post.data as any).script || (post.data as any).content || (post.data as any).body || post.data.excerpt || '';
+  const scriptText = extractPlainText(rawScript);
 
   return {
     id: post.id,
