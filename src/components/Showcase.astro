@@ -30,6 +30,9 @@ const labelMap: Record<string, string> = {
   'IVR/On-Hold Messaging': 'IVR & On-Hold',
   'Brand Imaging/Sound Design': 'Imaging & Sound Design',
   'Commercial Ad Production': 'Commercial Ads',
+  'Scripts & Copywriting': 'Scripts & Copywriting',
+  'Scriptwriting': 'Scripts & Copywriting',
+  'Scripts': 'Scripts & Copywriting',
 };
 
 // Category image fallbacks
@@ -40,7 +43,8 @@ const categoryImages: Record<string, string> = {
   'Imaging & Sound Design': 'https://images.pexels.com/photos/1626481/pexels-photo-1626481.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Commercial Ads': 'https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=600',
   'Podcast Editing': 'https://images.pexels.com/photos/3784221/pexels-photo-3784221.jpeg?auto=compress&cs=tinysrgb&w=600',
-  'Music Mixes': 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=600'
+  'Music Mixes': 'https://images.pexels.com/photos/164938/pexels-photo-164938.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'Scripts & Copywriting': 'https://images.pexels.com/photos/3059747/pexels-photo-3059747.jpeg?auto=compress&cs=tinysrgb&w=600',
 };
 
 const allItems = posts.map((post) => {
@@ -78,10 +82,14 @@ const allItems = posts.map((post) => {
   const storageKey = media?.meta?.storageKey ?? media?.id;
   const mediaSrc = media?.src || (storageKey ? `/_emdash/api/media/file/${storageKey}?v=3` : undefined);
 
+  const scriptText = (post.data as any).script || (post.data as any).content || (post.data as any).body || post.data.excerpt || '';
+
   return {
+    id: post.id,
     title: post.data.title,
     category: category,
     description: post.data.excerpt || '',
+    scriptText: scriptText,
     image: getOptimizedImageUrl(featImgUrl, fallbackImage),
     fallbackImage: fallbackImage,
     client: 'Beth Jordan Productions',
@@ -116,7 +124,33 @@ const categories = [
 
   <div
     class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-    x-data="{ activeFilter: 'All', showAll: false }"
+    x-data="{ 
+      activeFilter: 'All', 
+      showAll: false, 
+      activeScript: null, 
+      scriptCopied: false,
+      openScriptModal(item) {
+        this.activeScript = item;
+        this.scriptCopied = false;
+        const dialog = document.getElementById('script-dialog');
+        if (dialog && typeof dialog.showModal === 'function') {
+          dialog.showModal();
+        }
+      },
+      closeScriptModal() {
+        const dialog = document.getElementById('script-dialog');
+        if (dialog && typeof dialog.close === 'function') {
+          dialog.close();
+        }
+        this.activeScript = null;
+      },
+      copyScriptText() {
+        if (!this.activeScript?.scriptText) return;
+        navigator.clipboard.writeText(this.activeScript.scriptText);
+        this.scriptCopied = true;
+        setTimeout(() => { this.scriptCopied = false; }, 2500);
+      }
+    }"
   >
     <!-- Section header -->
     <div class="text-center mb-16">
@@ -365,14 +399,97 @@ const categories = [
               </div>
             )}
             
-            <div class="mt-4 flex items-center gap-1.5">
-              <span class="w-1 h-1 rounded-full bg-brand-purple/60" aria-hidden="true"></span>
-              <span class="font-mono text-[10px] text-white/35 tracking-wide">{item.client}</span>
+            <div class="mt-4 pt-3 border-t border-white/5 flex items-center justify-between gap-2">
+              <div class="flex items-center gap-1.5">
+                <span class="w-1 h-1 rounded-full bg-brand-purple/60" aria-hidden="true"></span>
+                <span class="font-mono text-[10px] text-white/35 tracking-wide">{item.client}</span>
+              </div>
+              <template x-if="item.scriptText">
+                <button
+                  @click={`openScriptModal(${JSON.stringify(item)})`}
+                  class="px-2.5 py-1 rounded-md bg-brand-purple/20 hover:bg-brand-purple/40 text-brand-purple-light text-xs font-mono transition-colors flex items-center gap-1 focus:outline-none cursor-pointer"
+                >
+                  <span>Read Script</span>
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                </button>
+              </template>
             </div>
           </div>
         </article>
       ))}
     </div>
+
+    <!-- Native HTML5 Dialog Modal for Script Viewer -->
+    <dialog
+      id="script-dialog"
+      class="fixed inset-0 m-auto rounded-3xl bg-brand-dark/95 border border-white/15 p-0 max-w-2xl w-11/12 shadow-2xl backdrop:backdrop-blur-md backdrop:bg-black/80 text-white overflow-hidden transition-all duration-300"
+      @keydown.escape="closeScriptModal()"
+    >
+      <template x-if="activeScript">
+        <div class="p-6 sm:p-8 flex flex-col max-h-[85vh]">
+          <!-- Modal Header -->
+          <div class="flex items-start justify-between gap-4 pb-4 border-b border-white/10">
+            <div>
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-brand-purple/20 border border-brand-purple/40 mb-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-brand-cyan"></span>
+                <span class="font-mono text-[10px] text-brand-purple-light uppercase tracking-wider" x-text="activeScript.category"></span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-white leading-tight" x-text="activeScript.title"></h3>
+            </div>
+            <button
+              @click="closeScriptModal()"
+              class="w-9 h-9 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white/60 hover:text-white transition-colors focus:outline-none cursor-pointer shrink-0"
+              aria-label="Close modal"
+            >
+              <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <!-- Optional Audio Preview Player Inside Modal -->
+          <template x-if="activeScript.audioSrc">
+            <div class="my-4 p-4 rounded-xl bg-white/[0.04] border border-white/10 flex items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brand-purple/80 flex items-center justify-center text-white shadow-md">
+                  <svg class="w-5 h-5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+                <div>
+                  <div class="text-xs font-medium text-white">Listen to Audio Preview</div>
+                  <div class="text-[10px] font-mono text-white/40">Read along with the recorded voiceover</div>
+                </div>
+              </div>
+              <audio controls :src="activeScript.audioSrc" class="h-8 max-w-[200px]" preload="none"></audio>
+            </div>
+          </template>
+
+          <!-- Teleprompter / Script Content Area -->
+          <div class="my-4 flex-grow overflow-y-auto pr-2 space-y-3 font-body text-sm text-white/80 leading-relaxed bg-black/40 p-5 rounded-2xl border border-white/5 max-h-[50vh]">
+            <template x-if="activeScript.scriptText">
+              <div class="whitespace-pre-line font-mono text-sm leading-relaxed text-white/90" x-text="activeScript.scriptText"></div>
+            </template>
+          </div>
+
+          <!-- Modal Action Footer -->
+          <div class="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3">
+            <button
+              @click="copyScriptText()"
+              class="px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs font-mono transition-all flex items-center gap-2 border border-white/10 focus:outline-none cursor-pointer"
+            >
+              <svg class="w-4 h-4 text-brand-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+              <span x-text="scriptCopied ? 'Copied to Clipboard! ✓' : 'Copy Script Text'">Copy Script Text</span>
+            </button>
+
+            <a
+              href="#contact"
+              @click="closeScriptModal()"
+              class="px-5 py-2.5 rounded-full bg-brand-purple hover:bg-brand-purple-dark text-white text-xs font-semibold transition-all shadow-lg shadow-brand-purple/20 flex items-center gap-2 focus:outline-none cursor-pointer"
+            >
+              <span>Request Voiceover for This Script</span>
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            </a>
+          </div>
+        </div>
+      </template>
+    </dialog>
 
     <!-- View All Toggle Button -->
     <div x-show="activeFilter === 'All'" class="text-center mt-10 mb-4">
