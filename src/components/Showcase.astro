@@ -1,5 +1,6 @@
 ---
 import { getTermsForEntries } from 'emdash';
+import { getOptimizedImageUrl } from '../utils/media';
 
 interface Post {
   id: string;
@@ -81,7 +82,7 @@ const allItems = posts.map((post) => {
     title: post.data.title,
     category: category,
     description: post.data.excerpt || '',
-    image: featImgUrl || fallbackImage,
+    image: getOptimizedImageUrl(featImgUrl, fallbackImage),
     fallbackImage: fallbackImage,
     client: 'Beth Jordan Productions',
     year: post.publishedAt
@@ -216,8 +217,11 @@ const categories = [
                     <img
                       src={item.image}
                       alt={`${item.title} thumbnail`}
+                      width="600"
+                      height="400"
                       class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                       loading={i < 3 ? 'eager' : 'lazy'}
+                      fetchpriority={i < 3 ? 'high' : 'auto'}
                       decoding="async"
                       onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                     />
@@ -249,8 +253,11 @@ const categories = [
                 <img
                   src={item.image}
                   alt={`${item.title} cover`}
+                  width="600"
+                  height="400"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading={i < 3 ? 'eager' : 'lazy'}
+                  fetchpriority={i < 3 ? 'high' : 'auto'}
                   decoding="async"
                   onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                 />
@@ -284,8 +291,11 @@ const categories = [
                 <img
                   src={item.image}
                   alt={`${item.title} cover`}
+                  width="600"
+                  height="400"
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading={i < 3 ? 'eager' : 'lazy'}
+                  fetchpriority={i < 3 ? 'high' : 'auto'}
                   decoding="async"
                   onerror={`this.onerror=null;this.src='${item.fallbackImage}';`}
                 />
